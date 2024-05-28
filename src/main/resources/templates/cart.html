@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    {{> partials/htmlHead }}
+</head>
+<body>
+{{> partials/header }}
+
+<section class="hero-section position-relative padding-small"
+         style="background-image: url(/images/banner-image-bg-1.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+    <div class="hero-content">
+        <div class="container">
+            <div class="row">
+                <div class="text-center">
+                    <h1>Cart</h1>
+                    <div class="breadcrumbs">
+						<span class="item">
+							<a href="index.html">Home > </a>
+						</span>
+                        <span class="item text-decoration-underline">Cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cart padding-small">
+    <div class="container">
+        <div class="row">
+            <div class="cart-table">
+                <div class="cart-header border-bottom border-top">
+                    <div class="row d-flex text-capitalize">
+                        <h4 class="col-lg-4 py-3 m-0">Product</h4>
+                        <h4 class="col-lg-3 py-3 m-0">Quantity</h4>
+                        <h4 class="col-lg-4 py-3 m-0">Subtotal</h4>
+                    </div>
+                </div>
+                {{#cartItems}}
+                <div class="cart-item border-bottom padding-small">
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 col-md-3">
+                            <div class="cart-info d-flex gap-2 flex-wrap align-items-center">
+                                <div class="col-lg-5">
+                                    <div class="card-image">
+                                        {{#image}}
+                                        <img src="{{image}}" alt="cart-img" class="img-fluid border rounded-3">
+                                        {{/image}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card-detail">
+                                        {{#name}}
+                                        <h5 class="mt-2"><a href="single-product.html">{{name}}</a></h5>
+                                        {{/name}}
+                                        <div class="card-price">
+                                            {{#price}}
+                                            <span class="price text-primary fw-light"
+                                                  data-currency-usd="{{PricePerUnit}}}">{{PricePerUnit}}</span>
+                                            {{/price}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-7">
+                            <div class="row d-flex">
+                                <div class="col-md-6">
+                                    <div class="product-quantity my-2 my-2">
+                                        <div class="input-group product-qty align-items-center"
+                                             style="max-width: 150px;">
+                          <span class="input-group-btn">
+                            <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-left-minus"
+                                    data-type="minus" data-field="" onclick="changeQuantitybyButtons(this, false)"
+                                    data-article-id="{{articleNo}}">
+                              <svg width="16" height="16">
+								  <p>-</p>
+
+                              </svg>
+                            </button>
+                          </span>
+                                            {{#quantity}}
+                                            <input type="text" id="quantity" name="quantity"
+                                                   class="form-control bg-white shadow border rounded-3 py-2 mx-2 input-number text-center"
+                                                   value="{{quantity}}" min="1" max="100" required data-article-id="{{articleNo}}" onchange="changeQuantity(this)">
+                                            {{/quantity}}
+                                            <span class="input-group-btn">
+                            <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-right-plus"
+                                    data-type="minus" data-field="" onclick="changeQuantitybyButtons(this, true)"
+                                    data-article-id="{{articleNo}}">
+                              <svg width="16" height="16">
+								  <p>+</p>
+                              </svg>
+                            </button>
+                          </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="total-price">
+                                        {{#price}}
+                                        <span class="money fs-2 fw-light text-primary">{{price}}</span>
+                                        {{/price}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-md-2">
+                            <div class="cart-cross-outline">
+                                <a href="#">
+                                    <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-right-plus"
+                                            data-type="minus" data-field="" onclick="deleteItemFromCart(this)"
+                                            data-article-id="{{articleNo}}">
+                                    <svg class="cart-cross-outline" width="38" height="38">
+                                        <p>x</p>
+                                        <use xlink:href="#cart-cross-outline"></use>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/cartItems}}
+            </div>
+            <div class="cart-totals padding-medium pb-0">
+                <h3 class="mb-3">Cart Totals</h3>
+                <div class="total-price pb-3">
+                    <table cellspacing="0" class="table text-capitalize">
+                        <tbody>
+                        <tr class="subtotal pt-2 pb-2 border-top border-bottom">
+                            <th>Subtotal</th>
+                            <td data-title="Subtotal">
+                      <span class="price-amount amount text-primary ps-5 fw-light">
+                        <bdi>
+                          <span class="price-currency-symbol">$</span>{{cartSubtotalPrice}}
+                        </bdi>
+                      </span>
+                            </td>
+                        </tr>
+                        <tr class="order-total pt-2 pb-2 border-bottom">
+                            <th>Total</th>
+                            <td data-title="Total">
+                      <span class="price-amount amount text-primary ps-5 fw-light">
+                        <bdi>
+                          <span class="price-currency-symbol">$</span>{{cartTotalPrice}}</bdi>
+                      </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="button-wrap d-flex flex-wrap gap-3">
+                    <button class="btn" onclick="window.location.href = '/index.html';">Continue Shopping</button>
+                    <button class="btn" onclick="window.location.href = '/checkout.html';">Proceed to checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+
+    async function changeQuantitybyButtons(button, increment) {
+        var item_num = button.getAttribute('data-article-id');
+
+        var articleInRequest = await fetch('/api/articleInCart?id=' + item_num)
+        var article = await articleInRequest.json()
+
+        fetch(`/api/changeArticleQuantity?increment=${increment}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(article)
+        }).then(response => {
+            if (response.ok) {
+                if (increment) {
+                    console.log('Item incremented successfully!');
+                }
+                console.log('Item decremented successfully!');
+
+                location.reload()
+
+            } else {
+                console.error('Failed to add Item to Cart');
+            }
+
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    async function deleteItemFromCart(button){
+        var item_num = button.getAttribute('data-article-id');
+        var articleInRequest = await fetch('/api/articleInCart?id=' + item_num)
+        var article = await articleInRequest.json()
+
+        fetch(`/api/removeArticleFromCart`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(article)
+        }).then(response => {
+            if (response.ok) {
+                console.log('Item removed successfully!');
+
+                location.reload()
+
+            } else {
+                console.error('Failed to add Item to Cart');
+            }
+
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    async function changeQuantity(input) {
+        var quantityValue = input.value;
+
+        var item_num = input.getAttribute('data-article-id');
+
+        var articleInRequest = await fetch('/api/articleInCart?id=' + item_num)
+        var article = await articleInRequest.json()
+
+        fetch(`/api/changeArticleQuantityDynamic?value=${quantityValue}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(article)
+        }).then(response => {
+            if (response.ok) {
+
+                console.log('Item changed successfully!');
+
+                location.reload()
+
+            } else {
+                console.error('Failed to add Item to Cart');
+            }
+
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+
+</script>
+
+{{> partials/footer }}
+</body>
+</html>
