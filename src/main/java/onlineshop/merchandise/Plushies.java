@@ -8,8 +8,10 @@ public class Plushies extends Article {
     protected int width;
     protected double price;
     protected String image;
-    protected String size;
+    protected double size;
     protected int inStock;
+    protected String imageOnInspect;
+    private String stringSize;
 
     public Plushies() {
         super();
@@ -21,9 +23,9 @@ public class Plushies extends Article {
         this.type = type;
     }
 
-    public Plushies(String name, String type, int height, int length, int width, double price, int inStock, String image) {
+    public Plushies(String name, String type, int height, int length, int width, double price, int inStock, String image, String imageOnInspect) {
         // Call the Article constructor with appropriate arguments
-        super(0, name, price, image, 1, false);
+        super(0, name, price, image, 1, false, imageOnInspect, inStock);
 
         // Set additional properties specific to Plushie
         this.name = name;
@@ -32,6 +34,7 @@ public class Plushies extends Article {
         this.height = height;
         this.length = length;
         this.width = width;
+        this.imageOnInspect = imageOnInspect;
     }
 
 
@@ -76,9 +79,14 @@ public class Plushies extends Article {
         this.inStock = inStock;
     }
 
-    public String getSize(){
-        this.size = width+"cm/"+height+"cm/"+length+"cm";
+    public double getSize() {
+        this.size = width * height * length;
         return size;
+    }
+
+    public String getStringSize(){
+        this.stringSize = width+"cm/"+height+"cm/"+length+"cm";
+        return stringSize;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package onlineshop;
 
 import onlineshop.merchandise.Article;
+import onlineshop.merchandise.Plushies;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -118,5 +119,15 @@ public class Cart {
 
 
         return items.size();
+    }
+
+    public void changeStockage(List<Article> cartItems) {
+        for (Article item : cartItems) {
+            for (Plushies plushies : Shop.getArticles()){
+                if(plushies.getArticleNo() == item.getArticleNo()){
+                    plushies.setInStock(plushies.getInStock() - item.getQuantity());
+                }
+            }
+        }
     }
 }

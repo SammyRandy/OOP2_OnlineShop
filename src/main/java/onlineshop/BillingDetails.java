@@ -12,8 +12,9 @@ public class BillingDetails {
     private String zip;
     private String phone;
     private String email;
+    private String paymentMethod;
 
-    public BillingDetails(String firstname, String lastname, String companyname, String country, String address, String address2, String city, String state, String zip, String phone, String email) {
+    public BillingDetails(String firstname, String lastname, String companyname, String country, String address, String address2, String city, String state, String zip, String phone, String email, String paymentMethod) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.companyname = companyname;
@@ -25,13 +26,12 @@ public class BillingDetails {
         this.zip = zip;
         this.phone = phone;
         this.email = email;
+        this.paymentMethod = paymentMethod;
     }
 
     public BillingDetails() {
 
     }
-
-    // Getter and setter methods for each property
 
     public String getFirstname() {
         return firstname;
@@ -121,6 +121,10 @@ public class BillingDetails {
         this.email = email;
     }
 
+    public String getPaymentMethod() { return paymentMethod; }
+
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+
     @Override
     public String toString() {
         return "BillingDetails{" +
@@ -135,6 +139,7 @@ public class BillingDetails {
                 ", zip='" + zip + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", paymentMethod='" + paymentMethod + '\'' +
                 '}';
     }
 }

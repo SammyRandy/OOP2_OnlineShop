@@ -10,16 +10,16 @@
 {{> partials/header }}
 
 <section class="hero-section position-relative padding-small"
-				 style="background-image: url(/images/banner-image-bg-1.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+		 style="background-image: url(https://www.stoffbook.de/images/gross/727045-201.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
 	<div class="hero-content">
 		<div class="container">
 			<div class="row">
 				<div class="text-center">
 					<h1>Shop</h1>
 					<div class="breadcrumbs">
-						<span class="item">
-							<a href="index.html">Home</a>
-						</span>
+                        <span class="item">
+                            <a href="index.html">Home</a>
+                        </span>
 					</div>
 				</div>
 			</div>
@@ -29,7 +29,7 @@
 
 <div class="shopify-grid padding-small">
 	<div class="container">
-		<div class="row flex-row-reverse g-md-5">
+		<div class="row flex-row-reverse g-md-5 justify-content-center">
 			<main class="col-md-9">
 				<div class="filter-shop d-flex flex-wrap justify-content-between mb-5">
 					<div class="showing-product">
@@ -38,40 +38,40 @@
 					<div class="sort-by">
 						<form action="/index.html" method="get" id="sortForm">
 							<select id="sorting" name="sort" class="form-select" onchange="document.getElementById('sortForm').submit()">
-								<option value="">Default sorting</option>
-								<option value="nameAsc" {{#selectedSort}}nameAsc{{/selectedSort}}>Name (A - Z)</option>
-								<option value="nameDesc" {{#selectedSort}}nameDesc{{/selectedSort}}>Name (Z - A)</option>
-								<option value="priceAsc" {{#selectedSort}}priceAsc{{/selectedSort}}>Price (Low-High)</option>
-								<option value="priceDesc" {{#selectedSort}}priceDesc{{/selectedSort}}>Price (High-Low)</option>
-								<option value="sizeAsc" {{#selectedSort}}sizeAsc{{/selectedSort}}>Size (Highest)</option>
-								<option value="sizeDesc" {{#selectedSort}}sizeDesc{{/selectedSort}}>Size (Lowest)</option>
+								<option value="" {{^selectedSort}}selected{{/selectedSort}}>Default sorting</option>
+								<option value="nameAsc" {{#isNameAsc}}selected{{/isNameAsc}}>Name (A - Z)</option>
+								<option value="nameDesc" {{#isNameDesc}}selected{{/isNameDesc}}>Name (Z - A)</option>
+								<option value="priceAsc" {{#isPriceAsc}}selected{{/isPriceAsc}}>Price (Low-High)</option>
+								<option value="priceDesc" {{#isPriceDesc}}selected{{/isPriceDesc}}>Price (High-Low)</option>
+								<option value="sizeAsc" {{#isSizeAsc}}selected{{/isSizeAsc}}>Size (Highest)</option>
+								<option value="sizeDesc" {{#isSizeDesc}}selected{{/isSizeDesc}}>Size (Lowest)</option>
 							</select>
 						</form>
 					</div>
 				</div>
 
-				<div class="row product-content product-store">
+				<div class="row product-content product-store justify-content-center">
 					{{#articles}}
-						<div class="col-lg-3 col-md-4 mb-4">
-							<div class="card position-relative p-4 border rounded-3">
-								<img src="{{image}}" class="img-fluid shadow-sm" alt="product item">
-								{{#name}}
-								<h6 id="goToDetails" class="mt-4 mb-0 fw-bold" data-article-id="{{articleNo}}" onclick="goToDetails(this)"><a href="#">{{name}}</a></h6>
-								{{/name}}
-								<div class="review-content d-flex">
-									<p class="my-2 me-2 fs-6 text-black-50">{{height}}cm/{{length}}cm/{{width}}cm
-								</div>
-								<span class="price mb-2 text-primary">{{price}}$</span>
-								<div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-									<button id="CartButton" type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
-													data-bs-title="Tooltip on top" data-article-id="{{articleNo}}">
-										<svg class="cart">
-											<use xlink:href="#cart"></use>
-										</svg>
-									</button>
-								</div>
+					<div class="col-lg-3 col-md-4 mb-4">
+						<div class="card position-relative p-4 border rounded-3">
+							<img src="{{image}}" class="img-fluid shadow-sm" alt="product item">
+							{{#name}}
+							<h6 id="goToDetails" class="mt-4 mb-0 fw-bold" data-article-id="{{articleNo}}" onclick="goToDetails(this)"><a href="#">{{name}}</a></h6>
+							{{/name}}
+							<div class="review-content d-flex">
+								<p class="my-2 me-2 fs-6 text-black-50">{{height}}cm/{{length}}cm/{{width}}cm
+							</div>
+							<span class="price mb-2 text-primary">{{price}}$</span>
+							<div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
+								<button id="CartButton" type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
+										data-bs-title="Tooltip on top" data-article-id="{{articleNo}}" onclick="handleAddToCart('{{articleNo}}')">
+									<svg class="cart">
+										<use xlink:href="#cart"></use>
+									</svg>
+								</button>
 							</div>
 						</div>
+					</div>
 					{{/articles}}
 				</div>
 
@@ -84,64 +84,48 @@
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
 
-		var buttons = document.querySelectorAll(".btn-dark");
-
-
-		buttons.forEach(function(button) {
-			button.addEventListener("click", async function () {
-
-				var articleId = this.getAttribute("data-article-id");
-
-				var article = await findArticleById(articleId);
-
-				addToCart(article)
-
-				console.log(article);
-			});
-		});
+		window.handleAddToCart = async function(articleId) {
+			var article = await findArticleById(articleId);
+			addToCart(article);
+			console.log(article);
+		};
 
 		window.goToDetails = function(element) {
 			var articleId = element.getAttribute("data-article-id");
 			console.log("Navigating to details page for article with ID:", articleId);
-			window.location.href = "/details.html?id=" + articleId
-		}
-
+			window.location.href = "/details.html?id=" + articleId;
+		};
 
 		async function findArticleById(id) {
 			console.log(id)
-			id = parseInt(id)
-			return fetch('/api/article?id='+ id)
+			id = parseInt(id);
+			return fetch('/api/article?id=' + id)
 					.then(response => response.json())
 					.then(data => {
-						return data
+						return data;
 					})
 					.catch(error => console.error('Error:', error));
 		}
 
-		async function addToCart(Item){
+		async function addToCart(item) {
 			fetch('/api/addToCart', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(Item)
+				body: JSON.stringify(item)
 			}).then(response => {
 				if (response.ok) {
 					console.log('Item added to Cart successfully!');
-
-					location.reload()
-
+					location.reload();
 				} else {
 					console.error('Failed to add Item to Cart');
 				}
-
 			}).catch(error => {
 				console.error('Error:', error);
 			});
 		}
 	});
-
-
 </script>
 
 {{> partials/footer }}

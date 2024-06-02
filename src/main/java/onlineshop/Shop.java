@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,8 +21,11 @@ import java.util.List;
 public class Shop {
     private final static String RESOURCES = "src/main/resources/";
     private final static String CSV_FILE = "books.csv";
+
     private static Logger log = LogManager.getLogger(Shop.class);
     private final static List<Plushies> PLUSHIES = new ArrayList<>(220);
+
+    private static final List<Plushies> ORIGINAL_PLUSHIES = Collections.unmodifiableList(PLUSHIES);
 
     public static void main(String[] args) {
         readArticles(CSV_FILE, PLUSHIES);
@@ -59,8 +63,12 @@ public class Shop {
                 int inStock = Integer.parseInt(record.get("InStock"));
 
                 String image = record.get("Image");
-                if (image.isEmpty()) image = "https://m.media-amazon.com/images/I/71PA63hllfL._AC_UF894,1000_QL80_.jpg";
-                Plushies plushie = new Plushies(name, type, height, length, width, price, inStock, image);
+                if (image.isEmpty()) image = "/images/winston_re.jpg";
+
+                String imageOnInspect = record.get("ImageOnInspect");
+                if (imageOnInspect.isEmpty()) image = "/images/winston_re.jpg";
+
+                Plushies plushie = new Plushies(name, type, height, length, width, price, inStock, image, imageOnInspect);
                 plushies.add(plushie);
             }
             in.close();
@@ -71,7 +79,7 @@ public class Shop {
     }
 
     public static List<Plushies> getArticles() {
-        return PLUSHIES;
+        return new ArrayList<>(ORIGINAL_PLUSHIES);
     }
 
     public static Plushies getPlushiebyID(int Id) {

@@ -30,6 +30,7 @@ public class Customer {
     protected LocalDate birthDate;
     protected Cart cart;
     protected List<Order> orders = new ArrayList<>();
+    protected double totalSpend;
 
     public Customer() {
         this.customerNo = customerCounter++;
@@ -80,14 +81,27 @@ public class Customer {
     public List<Order> getOrders() {
         return orders;
     }
-    public List<Article> getOrderByID(int id) {
+    public Order getOrderByID(int id) {
         id -= 1;
         if (id >= 0 && id < orders.size()) {
-            return getOrderByID_List(orders.get(id));
+            System.out.println("order in cusrtiner: " + orders.get(id));
+            return orders.get(id);
         } else {
             System.out.println("Invalid order ID: " + id);
             return null;
         }
+    }
+
+    public double getTotalSpend() {
+        double total = 0;
+        for (Order order : orders) {
+            total += order.getGrandTotal();
+        }
+        return total;
+    }
+
+    public void setTotalSpend(double totalSpend) {
+        this.totalSpend = totalSpend;
     }
 
     public List<Article> getOrderByID_List(Order order){

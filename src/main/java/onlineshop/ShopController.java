@@ -1,7 +1,6 @@
 package onlineshop;
 
-import jakarta.servlet.http.HttpSession;
-import onlineshop.merchandise.Article;
+import onlineshop.enums.ShoppingCost;
 import onlineshop.merchandise.Plushies;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +22,7 @@ public class ShopController {
 
     @Autowired
     Cart cart;
-    
+
     @Autowired
     Customer customer;
 
@@ -38,7 +37,6 @@ public class ShopController {
                            @RequestParam(value = "sort", defaultValue = "") String sort) {
         List<Plushies> allArticles = Shop.getArticles();
 
-        // Sorting logic
         switch (sort) {
             case "nameAsc":
                 Collections.sort(allArticles, Comparator.comparing(Plushies::getName));
@@ -52,12 +50,16 @@ public class ShopController {
             case "priceDesc":
                 Collections.sort(allArticles, Comparator.comparingDouble(Plushies::getPrice).reversed());
                 break;
-/*            case "sizeAsc":
-                allArticles.sort(Comparator.comparingInt(plushie -> plushie.getHeight() * plushie.getLength() * plushie.getWidth()));
+            case "sizeAsc":
+                Collections.sort(allArticles, Comparator.comparingDouble(Plushies::getSize).reversed());
                 break;
-            case "sizeDec":
-                allArticles.sort(Comparator.comparingInt(plushie -> plushie.getHeight() * plushie.getLength() * plushie.getWidth())).reversed();
-                break;*/
+            case "sizeDesc":
+                Collections.sort(allArticles, Comparator.comparingDouble(Plushies::getSize));
+                break;
+            default:
+                sort = ""; // Reset to default sorting if none selected
+                allArticles = Shop.getArticles();
+                break;
         }
 
         int totalArticles = allArticles.size();
@@ -68,9 +70,7 @@ public class ShopController {
 
         List<Plushies> paginatedArticles = allArticles.subList(start, end);
 
-        model.addAttribute(ARTICLES, paginatedArticles);
-        model.addAttribute("cartItems", cart.getCart_items());
-        model.addAttribute("cartTotalPrice", cart.getGrandTotal());
+        model.addAttribute("articles", paginatedArticles);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("isFirstPage", page == 1);
@@ -84,18 +84,23 @@ public class ShopController {
 
         List<Page> pages = new ArrayList<>();
         for (int i = 1; i <= totalPages; i++) {
-            pages.add(new Page(i, i == page));
+            pages.add(new Page(i, i == page, sort));
         }
         model.addAttribute("pages", pages);
 
-        if (cart.getCartSize() > 0) {
-            model.addAttribute("cartSize", cart.getCartSizeByCart(cart));
-        } else {
-            model.addAttribute("cartSize", 0);
-        }
+        model.addAttribute("isNameAsc", "nameAsc".equals(sort));
+        model.addAttribute("isNameDesc", "nameDesc".equals(sort));
+        model.addAttribute("isPriceAsc", "priceAsc".equals(sort));
+        model.addAttribute("isPriceDesc", "priceDesc".equals(sort));
+        model.addAttribute("isSizeAsc", "sizeAsc".equals(sort));
+        model.addAttribute("isSizeDesc", "sizeDesc".equals(sort));
+
+        addCartAttributes(model);
+
 
         return "index";
     }
+
 
 /*    @GetMapping(value = {"/cart.html"})
     public String cartPage(HttpSession session, Model model) {
@@ -114,77 +119,61 @@ public class ShopController {
 
     @GetMapping(value = {"/{name}.html"})
     public String htmlMapping(@PathVariable String name, Model model) {
-        model.addAttribute("cartItems", cart.getCart_items());
-        model.addAttribute("cartTotalPrice", cart.getGrandTotal());
-        model.addAttribute("cartSubtotalPrice", cart.getSubTotal());
-        if (cart.getCartSize() > 0) {
-            model.addAttribute("cartSize", cart.getCartSizeByCart(cart));
-        } else {
-            model.addAttribute("cartSize", 0);
-        }
+        addCartAttributes(model);
+        addCartPriceAttributes(model);
+
         return name;
     }
 
-    @GetMapping(value = {"/order-list.html"})
-    public String htmlMapping(Model model) {
-        List<Order> orders = customer.getOrders();
-        if(!customer.getOrders().isEmpty()) {
-            System.out.println(customer.getOrders().get(0));
-            // Debugging: Print orders and billing details
-            for (Order order : orders) {
-                System.out.println("Order ID: " + order.orderNumber);
-                if (order.getBillingDetails() != null) {
-                    System.out.println("Billing Address: " + order.getBillingDetails().getAddress());
-                } else {
-                    System.out.println("Billing Details are null");
-                }
-            };}
+    @GetMapping(value = {"/checkout.html"})
+    public String checkoutPage(Model model) {
+        if (cart.getCartSize() == 0) {
+            model.addAttribute("cartIsEmpty", true);
+        } else {
+            model.addAttribute("cartIsEmpty", false);
+        }
+        addCartAttributes(model);
 
+        addCartPriceAttributes(model);
+
+
+        return "checkout";
+    }
+
+    @GetMapping(value = {"/order-list.html"})
+    public String orderlistPage(Model model) {
+        List<Order> orders = customer.getOrders();
+        System.out.println(customer.getTotalSpend());
         model.addAttribute("orders", orders);
-        model.addAttribute("cartItems", cart.getCart_items());
-        model.addAttribute("cartTotalPrice", cart.getGrandTotal());
-        model.addAttribute("cartSubtotalPrice", cart.getSubTotal());
-        model.addAttribute("cartSize", cart.getCartSize() > 0 ? cart.getCartSizeByCart(cart) : 0);
+        model.addAttribute("ordersTotalSpend", customer.getTotalSpend());
+        addCartAttributes(model);
 
         return "order-list";
     }
 
 
     @GetMapping(value = {"/details.html"})
-    public String htmlMapping(@RequestParam int id, Model model) {
+    public String detailsPage(@RequestParam int id, Model model) {
         Plushies plushie = Shop.getPlushiebyID(id);
         model.addAttribute("plushie", plushie);
 
-        model.addAttribute("cartItems", cart.getCart_items());
-        model.addAttribute("cartTotalPrice", cart.getGrandTotal());
-        model.addAttribute("cartSubtotalPrice", cart.getSubTotal());
-        if (cart.getCartSize() > 0) {
-            model.addAttribute("cartSize", cart.getCartSizeByCart(cart));
-        } else {
-            model.addAttribute("cartSize", 0);
-        }
+        addCartAttributes(model);
         return "details";
     }
 
+
+
     @GetMapping(value = {"/order.html"})
     public String orderPage(@RequestParam (value = "orderCount", defaultValue = "1") int OrderCount, Model model) {
-        List<Article> order = customer.getOrderByID(OrderCount);
-        model.addAttribute("orderItems", order);
-        model.addAttribute("cartItems", cart.getCart_items());
-        model.addAttribute("cartTotalPrice", cart.getGrandTotal());
-        model.addAttribute("cartSubtotalPrice", cart.getSubTotal());
-        if (cart.getCartSize() > 0) {
-            model.addAttribute("cartSize", cart.getCartSizeByCart(cart));
-        } else {
-            model.addAttribute("cartSize", 0);
-        }
-        /*model.addAttribute("orderTotalPrice", order.getGrandTotal());
-       *//* model.addAttribute("orderSubtotalPrice", order.getSubTotal());*//*
-        if (order.getOrderSize() > 0) {
-            model.addAttribute("orderSize", order.getOrderSizeByOrder(order));
-        } else {
-            model.addAttribute("orderSize", 0);
-        }*/
+        Order order = customer.getOrderByID(OrderCount);
+
+        model.addAttribute("orderItems", order.getOrder_items());
+        model.addAttribute("orderTotalPrice", order.getTotal());
+        model.addAttribute("orderSubtotalPrice", order.getSubTotal());
+
+        addCartAttributes(model);
+        addOrderPriceAttributes(model, order);
+
         return "order";
     }
 
@@ -201,13 +190,48 @@ public class ShopController {
         return "checkout";
     }*/
 
+    private void addCartAttributes(Model model) {
+        model.addAttribute("cartItems", cart.getCart_items());
+        model.addAttribute("cartTotalPrice", cart.getGrandTotal());
+        model.addAttribute("cartSubtotalPrice", cart.getSubTotal());
+        model.addAttribute("cartSize", cart.getCartSize() > 0 ? cart.getCartSizeByCart(cart) : 0);
+    }
+
+    private void addCartPriceAttributes(Model model) {
+        double shippingCosts = ShoppingCost.SHIPPING.getValue();
+        double taxes = ShoppingCost.TAX_RATE.getValue();
+        String taxOnDisplay = (int)(taxes * 100) + "%";
+        double CartGrandTotal = Math.round((cart.getGrandTotal() + shippingCosts + (cart.getGrandTotal() * taxes)) * 100) / 100.0;
+
+
+        model.addAttribute("shippingCosts", shippingCosts);
+        model.addAttribute("taxOnDisplay", taxOnDisplay);
+        model.addAttribute("grandTotal", CartGrandTotal);
+
+
+    }
+
+    private void addOrderPriceAttributes(Model model, Order order) {
+        double shippingCosts = ShoppingCost.SHIPPING.getValue();
+        double taxes = ShoppingCost.TAX_RATE.getValue();
+        String taxOnDisplay = (int)(taxes * 100) + "%";
+        double orderGrandTotal = Math.round((order.getTotal() + shippingCosts + (order.getTotal() * taxes)) * 100) / 100.0;
+
+        model.addAttribute("shippingCosts", shippingCosts);
+        model.addAttribute("taxOnDisplay", taxOnDisplay);
+        model.addAttribute("orderGrandTotal", orderGrandTotal);
+
+    }
+
     static class Page {
         private final int number;
         private final boolean isCurrent;
+        private final String sort;
 
-        Page(int number, boolean isCurrent) {
+        Page(int number, boolean isCurrent, String sort) {
             this.number = number;
             this.isCurrent = isCurrent;
+            this.sort = sort;
         }
 
         public int getNumber() {
@@ -217,5 +241,10 @@ public class ShopController {
         public boolean isCurrent() {
             return isCurrent;
         }
+
+        public String getSort() {
+            return sort;
+        }
     }
+
 }

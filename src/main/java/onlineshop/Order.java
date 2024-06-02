@@ -1,32 +1,39 @@
 package onlineshop;
 
+import onlineshop.enums.ShoppingCost;
 import onlineshop.merchandise.Article;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class Order {
-    private LocalDate date;
+    private String formatDate;
+    private double Total;
     private double grandTotal;
     BillingDetails billingDetails;
     int orderNumber;
+    private double subTotal;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
 
     List<Article> items = new ArrayList<>();
 
     public Order(BillingDetails billingDetails) {
         this.billingDetails = billingDetails;
-        this.date = LocalDate.now(); // Set current date
+        this.formatDate = LocalDateTime.now().format(formatter);
     }
 
     public Order() {
-        this.date = LocalDate.now(); // Set current date
+        this.formatDate = formatDate;
     }
 
     public List<Article> getOrder_items() {
+        System.out.println("Here are my items" + items);
         return items;
     }
 
@@ -51,14 +58,35 @@ public class Order {
         this.items = items;
     }
 
-    public double getGrandTotal() {
+    public double getTotal() {
         double total = 0;
         for (Article item : items) {
             total += item.getPrice();
         }
-        grandTotal = total;
-        grandTotal = Math.round(grandTotal * 100.0) / 100.0;
+        Total = total;
+        Total = Math.round(Total * 100.0) / 100.0;
+        return Total;
+    }
+
+    public double getGrandTotal(){
+        double shippingCosts = ShoppingCost.SHIPPING.getValue();
+        double taxes = ShoppingCost.TAX_RATE.getValue();
+
+        double totalPrice = Math.round((this.getTotal() + shippingCosts + (this.getTotal() * taxes)) * 100) / 100.0;
+        this.grandTotal = totalPrice;
         return grandTotal;
+
+    }
+
+    public double getSubTotal() {
+        double total = 0;
+        for (Article item : items) {
+            total += item.getPricePerUnit();
+        }
+        subTotal = total;
+
+        subTotal = Math.round(subTotal * 100.0) / 100.0;
+        return subTotal;
     }
 
     public Article getOrder_item(int articleNo) {
@@ -88,8 +116,8 @@ public class Order {
         }
     }
 
-    public LocalDate getDate() {
-        return date;
+    public String getDate() {
+        return formatDate;
     }
 
     public void removeItemFromOrder(Article item, Order Order) {
@@ -119,7 +147,7 @@ public class Order {
 
     public void transferFromCart(Cart cart) {
         this.items = new ArrayList<>(cart.getCart_items());
-        this.grandTotal = cart.getGrandTotal();
+        this.Total = cart.getGrandTotal();
     }
 
     public String getAddress() {
@@ -132,5 +160,13 @@ public class Order {
             System.out.println("BillingDetails is null");
             return null;
         }
+    }
+    public String getPaymentMethod() {
+        BillingDetails details = getBillingDetails();
+        if (details != null) {
+            System.out.println(details.getPaymentMethod());
+            return details.getPaymentMethod();
+        }
+        return null;
     }
 }

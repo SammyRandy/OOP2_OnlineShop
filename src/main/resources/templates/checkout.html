@@ -10,8 +10,9 @@
 {{> partials/header }}
 
 <section class="hero-section position-relative padding-small"
-		 style="background-image: url(/images/banner-image-bg-1.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+		 style="background-image: url(https://www.stoffbook.de/images/gross/727045-201.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
 	<div class="hero-content">
+
 		<div class="container">
 			<div class="row">
 				<div class="text-center">
@@ -21,13 +22,19 @@
 							<a href="index.html">Home > </a>
 						</span>
 						<span class="item text-decoration-underline">Checkout</span>
+
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</section>
 
+</section>
+{{#cartIsEmpty}}
+<div class="alert alert-danger" role="alert">
+	Your cart is empty. Please add items to your cart before proceeding to checkout.
+</div>
+{{/cartIsEmpty}}
 <section class="checkout-wrap padding-medium">
 	<div class="container">
 		<div class="row d-flex flex-wrap">
@@ -79,20 +86,21 @@
 
 					<label for="email">Email address *</label>
 					<input type="email" id="email" name="email" class="form-control mt-2 mb-4 ps-3" required>
-
+					{{^cartIsEmpty}}
 					<button type="submit" name="submit" class="btn" onclick="validateAndSubmit(event)">Place an order</button>
+					{{/cartIsEmpty}}
 				</form>
 			</div>
 			<div class="col-lg-6">
 				<div>
 					<h3 class="mb-3">Additional Information</h3>
 					<div class="billing-details">
-						<label for="fname">Order notes (optional)</label>
-						<textarea class="form-control pt-3 pb-3 ps-3 mt-2"
+						<label for="orderNotes">Order notes (optional)</label>
+						<textarea id="orderNotes" class="form-control pt-3 pb-3 ps-3 mt-2"
 								  placeholder="Notes about your order. Like special notes for delivery."></textarea>
 					</div>
 				</div>
-
+				{{^cartIsEmpty}}
 				<div class="cart-totals padding-medium pb-0">
 					<h3 class="mb-3">Cart Totals</h3>
 					<div class="articles-list mt-3">
@@ -109,7 +117,7 @@
 							<tbody>
 							{{#cartItems}}
 							<tr>
-								<td><img src="{{image}}" alt="{{name}}" style="width:50px;height:50px;"></td>
+								<td><img src="{{imageOnInspect}}" alt="{{name}}" style="width:50px;height:50px;"></td>
 								<td>{{name}}</td>
 								<td><span class="price-currency-symbol">$</span>{{price}}</td>
 								<td>{{quantity}}</td>
@@ -131,12 +139,29 @@
 									</span>
 								</td>
 							</tr>
+							<tr class="tax pt-2 pb-2 border-bottom">
+								<th>Tax</th>
+								<td data-title="Tax">
+									<span class="price-amount amount text-primary ps-5 fw-light">
+										<bdi>{{taxOnDisplay}}</bdi>
+									</span>
+								</td>
+							</tr>
+							<tr class="shipping pt-2 pb-2 border-bottom">
+								<th>Shipping</th>
+								<td data-title="Shipping">
+									<span class="price-amount amount text-primary ps-5 fw-light">
+										<bdi>
+											<span class="price-currency-symbol">$</span>{{shippingCosts}}</bdi>
+									</span>
+								</td>
+							</tr>
 							<tr class="order-total pt-2 pb-2 border-bottom">
 								<th>Total</th>
 								<td data-title="Total">
 									<span class="price-amount amount text-primary ps-5 fw-light">
 										<bdi>
-											<span class="price-currency-symbol">$</span>{{cartTotalPrice}}</bdi>
+											<span class="price-currency-symbol">$</span>{{grandTotal}}</bdi>
 									</span>
 								</td>
 							</tr>
@@ -144,19 +169,20 @@
 						</table>
 					</div>
 				</div>
+				{{/cartIsEmpty}}
 				<div class="list-group">
 					<label class="list-group-item d-flex gap-2 border-0">
-						<input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios"
-							   id="listGroupRadios1" value="" checked>
+						<input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
+							   id="paymentMethod1" value="Direct bank transfer" checked>
 						<span>
 							<p class="mb-1">Direct bank transfer</p>
 							<small>Make your payment directly into our bank account. Please use your Order ID. Your order will
-								shipped after funds have cleared in our account.</small>
+								be shipped after funds have cleared in our account.</small>
 						</span>
 					</label>
 					<label class="list-group-item d-flex gap-2 border-0">
-						<input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios"
-							   id="listGroupRadios2" value="">
+						<input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
+							   id="paymentMethod2" value="Check payments">
 						<span>
 							<p class="mb-1">Check payments</p>
 							<small>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store
@@ -164,16 +190,16 @@
 						</span>
 					</label>
 					<label class="list-group-item d-flex gap-2 border-0">
-						<input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios"
-							   id="listGroupRadios3" value="">
+						<input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
+							   id="paymentMethod3" value="Cash on delivery">
 						<span>
 							<p class="mb-1">Cash on delivery</p>
 							<small>Pay with cash upon delivery.</small>
 						</span>
 					</label>
 					<label class="list-group-item d-flex gap-2 border-0">
-						<input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios"
-							   id="listGroupRadios3" value="">
+						<input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
+							   id="paymentMethod4" value="Paypal">
 						<span>
 							<p class="mb-1">Paypal</p>
 							<small>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</small>
@@ -188,7 +214,7 @@
 <script>
 
 	document.addEventListener('DOMContentLoaded', (event) => {
-		let orderCount = 0
+		let orderCount = 0;
 
 		async function SubmitOrder() {
 			orderCount++;
@@ -205,15 +231,14 @@
 				state: document.getElementById('state').value,
 				zip: document.getElementById('zip').value,
 				phone: document.getElementById('phone').value,
-				email: document.getElementById('email').value
+				email: document.getElementById('email').value,
+				paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
 			};
-			console.log(billingDetails)
+			console.log(billingDetails.paymentMethod);
 
 			try {
-
 				var cartResponse = await fetch('/api/cart');
 				var cart = await cartResponse.json();
-
 
 				let response = await fetch('/api/addCartToOrder', {
 					method: 'POST',
@@ -226,12 +251,10 @@
 				if (response.ok) {
 					console.log('Cart added to Order successfully!');
 					response.json().then(data => {
-						console.log(data); // Print the response body
-						orderCount = parseInt(data)
+						console.log(data);
+						orderCount = parseInt(data);
 						window.location.href = `/order.html?orderCount=${orderCount}`;
 					});
-
-
 				} else {
 					console.error('Failed to add Cart to Order');
 				}
@@ -256,5 +279,8 @@
 </script>
 
 {{> partials/footer }}
+
+
+
 </body>
 </html>

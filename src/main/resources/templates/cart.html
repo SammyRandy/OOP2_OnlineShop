@@ -10,7 +10,7 @@
 {{> partials/header }}
 
 <section class="hero-section position-relative padding-small"
-         style="background-image: url(/images/banner-image-bg-1.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+         style="background-image: url(https://www.stoffbook.de/images/gross/727045-201.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
     <div class="hero-content">
         <div class="container">
             <div class="row">
@@ -47,14 +47,14 @@
                                 <div class="col-lg-5">
                                     <div class="card-image">
                                         {{#image}}
-                                        <img src="{{image}}" alt="cart-img" class="img-fluid border rounded-3">
+                                        <img src="{{imageOnInspect}}" alt="cart-img" class="img-fluid border rounded-3">
                                         {{/image}}
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="card-detail">
                                         {{#name}}
-                                        <h5 class="mt-2"><a href="single-product.html">{{name}}</a></h5>
+                                        <h5 class="mt-2"><a href="details.html?id={{articleNo}}">{{name}}</a></h5>
                                         {{/name}}
                                         <div class="card-price">
                                             {{#price}}
@@ -140,12 +140,29 @@
                       </span>
                             </td>
                         </tr>
+                        <tr class="tax pt-2 pb-2 border-bottom">
+                            <th>Tax</th>
+                            <td data-title="Tax">
+									<span class="price-amount amount text-primary ps-5 fw-light">
+										<bdi>{{taxOnDisplay}}</bdi>
+									</span>
+                            </td>
+                        </tr>
+                        <tr class="shipping pt-2 pb-2 border-bottom">
+                            <th>Shipping</th>
+                            <td data-title="Shipping">
+									<span class="price-amount amount text-primary ps-5 fw-light">
+										<bdi>
+											<span class="price-currency-symbol">$</span>{{shippingCosts}}</bdi>
+									</span>
+                            </td>
+                        </tr>
                         <tr class="order-total pt-2 pb-2 border-bottom">
                             <th>Total</th>
                             <td data-title="Total">
                       <span class="price-amount amount text-primary ps-5 fw-light">
                         <bdi>
-                          <span class="price-currency-symbol">$</span>{{cartTotalPrice}}</bdi>
+                          <span class="price-currency-symbol">$</span>{{grandTotal}}</bdi>
                       </span>
                             </td>
                         </tr>

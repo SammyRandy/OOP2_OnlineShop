@@ -10,7 +10,7 @@
 {{> partials/header }}
 
 <section class="hero-section position-relative padding-small"
-         style="background-image: url(/images/banner-image-bg-1.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+         style="background-image: url(https://www.stoffbook.de/images/gross/727045-201.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
     <div class="hero-content">
         <div class="container">
             <div class="row">
@@ -40,7 +40,8 @@
                             <h4 class="col-lg-2 py-3 m-0">Date</h4>
                             <h4 class="col-lg-4 py-3 m-0">Address</h4>
                             <h4 class="col-lg-2 py-3 m-0">No. of Items</h4>
-                            <h4 class="col-lg-2 py-3 m-0">Total</h4>
+                            <h4 class="col-lg-1 py-3 m-0">Total</h4>
+                            <h4 class="col-lg-1 py-3 m-0">Payment</h4>
                         </div>
                     </div>
                     {{#orders}}
@@ -54,13 +55,16 @@
                                     {{date}}
                                 </div>
                                 <div class="col-lg-4 col-md-3">
-                                    {{Address}}<br/>
+                                    {{Address}}
                                 </div>
                                 <div class="col-lg-2 col-md-3">
                                     {{OrderSize}}
                                 </div>
-                                <div class="col-lg-2 col-md-3">
-                                    {{GrandTotal}}
+                                <div class="col-lg-1 col-md-3">
+                                    ${{GrandTotal}}
+                                </div>
+                                <div class="col-lg-1 col-md-3">
+                                    {{PaymentMethod}}
                                 </div>
                             </div>
                         </div>
@@ -68,8 +72,9 @@
                     {{/orders}}
                 </div>
 
+
                 <div class="cart-totals padding-small pb-0">
-                    <h3 class="mb-3">Cart Totals</h3>
+                    <h3 class="mb-3">Orders Totals</h3>
                     <div class="total-price pb-3">
                         <table cellspacing="0" class="table text-capitalize">
                             <tbody>
@@ -78,7 +83,7 @@
                                 <td data-title="Total">
                       <span class="price-amount amount text-primary ps-5 fw-light">
                         <bdi>
-                          <span class="price-currency-symbol">$</span>{grandTotal}
+                          <span class="price-currency-symbol">$</span>{{ordersTotalSpend}}
 												</bdi>
                       </span>
                                 </td>

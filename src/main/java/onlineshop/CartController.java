@@ -37,7 +37,6 @@ public class CartController {
     @PostMapping("/addToCart")
     @ResponseBody
     public ResponseEntity<String> addToCart(@RequestBody Article item) {
-        System.out.println(item.getQuantity());
         if (item.getQuantity() > 1) {
             cart.addItemToCart(item, cart, item.getQuantity());
         }

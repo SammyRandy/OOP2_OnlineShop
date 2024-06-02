@@ -8,14 +8,19 @@ public class Article {
   protected int articleNo;
   /** Display-name of this Article */
   protected String name;
-  /** Manufacturer of this Article */
-  protected String manufacturer;
   /** Shop price */
   protected double price;
-  /** URL to the image */
+  /** On sale price */
+  protected double priceOnSale;
+  /** URL to the resized image */
   protected String image;
   /** quantity of item */
   protected int quantity = 1;
+  /** URL to the original image*/
+  protected String imageOnInspect;
+  /** How many in Stock of item */
+  protected int inStock;
+
 
   protected boolean showQuantity;
 
@@ -23,12 +28,8 @@ public class Article {
     this.articleNo = Article.articleCounter++;
   }
 
-  public Article(String name, String manufacturer) {
-    this.name = name;
-    this.manufacturer = manufacturer;
-  }
 
-  public Article(int articleNo, String name, double price, String image, int quantity, boolean showQuantity) {
+  public Article(int articleNo, String name, double price, String image, int quantity, boolean showQuantity, String imageOnInspect, int inStock) {
     this.articleNo = Article.articleCounter++;
     this.name = name;
 
@@ -36,6 +37,8 @@ public class Article {
     this.image = image;
     this.quantity = quantity;
     this.showQuantity = showQuantity;
+    this.imageOnInspect = imageOnInspect;
+    this.inStock = inStock;
 
   }
 
@@ -47,6 +50,10 @@ public class Article {
     return image;
   }
 
+  public String getImageOnInspect(){
+    return imageOnInspect;
+  }
+
 
   public double getPrice() {
     return Math.round((price * quantity) * 100.0) / 100.0;
@@ -54,6 +61,12 @@ public class Article {
 
   public double getPricePerUnit() {
     return price;
+  }
+
+  public double getPriceOnSale() {
+    priceOnSale = price * 1.1;
+    priceOnSale = Math.round(priceOnSale * 100.0) / 100.0;
+    return priceOnSale;
   }
 
   public String getName() {
@@ -87,15 +100,17 @@ public class Article {
   }
 
   public boolean getShowQuantity(){
-    boolean show = false;
 
-    if (quantity > 1)
-    {
-      show = true;
-    }
-    showQuantity = show;
+      showQuantity = quantity > 1;
 
     return showQuantity;
+  }
+
+  public int getInStock() {
+    return inStock;
+  }
+  public void setInStock(int inStock) {
+    this.inStock = inStock;
   }
 
   @Override
@@ -113,7 +128,6 @@ public class Article {
     return "Article{" +
             "articleNo=" + articleNo +
             ", name='" + name + '\'' +
-            ", manufacturer='" + manufacturer + '\'' +
             ", price=" + price +
             ", image='" + image + '\'' +
             ", quantity=" + quantity +
