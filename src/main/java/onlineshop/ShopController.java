@@ -54,6 +54,7 @@ public class ShopController {
                            @RequestParam(value = "page", defaultValue = "1") int page,
                            @RequestParam(value = "sort", defaultValue = "") String sort) {
 
+        // Remove all Articles out of stock
         List<Plushies> allArticles = Shop.getArticles();
         for (Plushies p : allArticles) {
             if (p.getInStock() <= 0){

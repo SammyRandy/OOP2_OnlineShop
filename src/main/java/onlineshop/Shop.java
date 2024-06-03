@@ -103,6 +103,11 @@ public class Shop {
         return null;
     }
 
+    /**
+     * Removes an article by the id by copying the unmodifiable list, removing the article from there, then updating the unmodifiable list (ORIGINAL_PLUSHIES) with the copied list (mutablePlushies)
+     *
+     * @param Id
+     */
     public static void removeArticle(int Id) {
         List<Plushies> mutablePlushies = new ArrayList<>(ORIGINAL_PLUSHIES);
         for (Plushies plushies : mutablePlushies) {

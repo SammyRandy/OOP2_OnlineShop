@@ -46,6 +46,12 @@ public class OrderController {
         return ResponseEntity.ok(orderCountString);
     }
 
+    /**
+     * Adds a single item to a new order with the specified billing details.
+     *
+     * @param billingDetails The billing details for the new order.
+     * @return A ResponseEntity containing the order number as a string.
+     */
     @PostMapping("/addItemToOrder")
     public ResponseEntity<String> addItemToOrder(
             @RequestParam(required = false) Integer id,
@@ -64,14 +70,11 @@ public class OrderController {
             itemInOrder.setQuantity(1);
         }
 
-
         order.addItemToOrder(itemInOrder);
         order.setOrderNumber(orderCount);
         customer.addToOrder(order);
         cart.changeStockage(order.getOrder_items());
         String orderCountString = String.valueOf(orderCount++);
-        
-        item.setQuantity(1);
 
         return ResponseEntity.ok(orderCountString);
     }

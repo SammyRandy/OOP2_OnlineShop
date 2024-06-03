@@ -353,8 +353,10 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const articleNo = urlParams.get('articleNo');
                 const quantity = urlParams.get('quantity');
+
                 let intArticleNo = parseInt(articleNo);
                 let intQuantity = parseInt(quantity);
+
                 let articleResponse = await fetch('/api/article?id=' + intArticleNo)
                     .then(response => response.json())
                     .then(data => {

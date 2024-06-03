@@ -67,6 +67,11 @@ public class Article {
 
   }
 
+  /**
+   * Constructs a new Article object as a copy of the specified Article.
+   *
+   * @param other The Article object to copy.
+   */
   public Article(Article other) {
     this.articleNo = other.articleNo; // Generally, you might want to assign a new articleNo
     this.name = other.name;
