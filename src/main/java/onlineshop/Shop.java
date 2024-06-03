@@ -95,7 +95,7 @@ public class Shop {
      * @return The plushie with the specified article number, or null if not found.
      */
     public static Plushies getPlushiebyID(int Id) {
-        for (Plushies plushies : PLUSHIES) {
+        for (Plushies plushies : ORIGINAL_PLUSHIES) {
             if (plushies.getArticleNo() == Id) {
                 return plushies;
             }
