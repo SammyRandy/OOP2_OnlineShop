@@ -114,7 +114,7 @@
 							</div>
 						</div>
 						<div class="action-buttons my-3 d-flex flex-wrap gap-3">
-							<!--<a href="#" class="btn" onclick="handleOrderNow('{{articleNo}}')">Order now</a>-->
+							<a href="#" class="btn" onclick="handleOrderNow('{{articleNo}}','{{quantity}}')">Order now</a>
 							<a href="#" class="btn btn-dark" onclick="handleAddToCart('{{articleNo}}')">Add to cart</a>
 						</div>
 					</div>
@@ -138,10 +138,14 @@
 			addToCart(article);
 		};
 
-		/*window.handleOrderNow = async function(articleId) {
-			var article = await findArticleById(articleId);
-			addToCart(article);
-		};*/
+		window.handleOrderNow = async function(articleId, quantity) {
+
+			quantity = document.getElementById("quantity").value;
+
+			console.log("artickleid",articleId)
+			console.log("quantity",quantity)
+			window.location.href = `checkout.html?articleNo=${articleId}&quantity=${quantity}`;
+		};
 
 		async function findArticleById(id) {
 			console.log(id)

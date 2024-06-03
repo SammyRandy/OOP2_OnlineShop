@@ -61,7 +61,6 @@ public class Order {
      * @return The list of articles in the order.
      */
     public List<Article> getOrder_items() {
-        System.out.println("Here are my items" + items);
         return items;
     }
 
@@ -99,8 +98,6 @@ public class Order {
      */
     public void setBillingDetails(BillingDetails billingDetails) {
         this.billingDetails = billingDetails;
-        System.out.println(orderNumber);
-        System.out.println(this.billingDetails.toString());
     }
 
     /**
@@ -170,20 +167,10 @@ public class Order {
      * Adds an article to the order. If the article is already in the order, it increments the quantity.
      *
      * @param item The article to add to the order.
-     * @param Order The order to which the article is to be added.
      */
-    public void addItemToOrder(Article item, Order Order) {
-        if (Order.getOrder_items().contains(item)) {
-            System.out.println("Item is already in the Order");
-            for (Article OrderItem : items) {
-                if (OrderItem.equals(item)) {
-                    OrderItem.incrementQuantity();
-                    break;
-                }
-            }
-        } else {
-            items.add(item);
-        }
+    public void addItemToOrder(Article item) {
+        System.out.println("Quantity in order: "+ item.getQuantity());
+        items.add(item);
     }
 
     /**
@@ -245,6 +232,15 @@ public class Order {
         if (details != null) {
             System.out.println(details.getPaymentMethod());
             return details.getPaymentMethod();
+        }
+        return null;
+    }
+    public Article getOrder_item(int articleNo) {
+        for (Article item : items) {
+            if (item.getArticleNo() == articleNo) {
+                System.out.println("quantity in getorddertiem: " + item.getQuantity());
+                return item;
+            }
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package onlineshop;
 
+import onlineshop.merchandise.Article;
 import onlineshop.merchandise.Plushies;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -25,7 +26,7 @@ public class Shop {
     private static Logger log = LogManager.getLogger(Shop.class);
     private final static List<Plushies> PLUSHIES = new ArrayList<>(220);
 
-    private static final List<Plushies> ORIGINAL_PLUSHIES = Collections.unmodifiableList(PLUSHIES);
+    private static List<Plushies> ORIGINAL_PLUSHIES = Collections.unmodifiableList(PLUSHIES);
 
     public static void main(String[] args) {
         readArticles(CSV_FILE, PLUSHIES);
@@ -100,5 +101,16 @@ public class Shop {
             }
         }
         return null;
+    }
+
+    public static void removeArticle(int Id) {
+        List<Plushies> mutablePlushies = new ArrayList<>(ORIGINAL_PLUSHIES);
+        for (Plushies plushies : mutablePlushies) {
+            if (plushies.getArticleNo() == Id) {
+                mutablePlushies.remove(plushies);
+                break; // Exit the loop after removing the article
+            }
+        }
+        ORIGINAL_PLUSHIES = Collections.unmodifiableList(mutablePlushies);
     }
 }

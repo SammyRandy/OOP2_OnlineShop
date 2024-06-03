@@ -178,13 +178,20 @@ public class Cart {
     /**
      * Changes the stock of the articles
      *
-     * @param cartItems contains the items in the cart of the customer.
+     * @param Items contains the items in the cart of the customer.
      */
-    public void changeStockage(List<Article> cartItems) {
-        for (Article item : cartItems) {
+    public void changeStockage(List<Article> Items) {
+        for (Article item : Items) {
             for (Plushies plushies : Shop.getArticles()) {
                 if (plushies.getArticleNo() == item.getArticleNo()) {
-                    plushies.setInStock(plushies.getInStock() - item.getQuantity());
+                    int newStock = plushies.getInStock() - item.getQuantity();
+                    if (newStock >= 0) {
+                        plushies.setInStock(newStock);
+                    } else {
+                        // Handle the error condition here
+                        // For example, throw an exception or log an error message
+                        System.err.println("Error: Insufficient stock available");
+                    }
                 }
             }
         }

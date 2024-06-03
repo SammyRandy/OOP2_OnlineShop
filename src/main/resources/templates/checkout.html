@@ -1,285 +1,414 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Checkout</title>
-	<meta name="keywords" content="">
-	<meta name="description" content="">
-	{{> partials/htmlHead }}
+    <title>Checkout</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    {{> partials/htmlHead }}
 </head>
 <body>
 {{> partials/header }}
 
 <section class="hero-section position-relative padding-small"
-		 style="background-image: url(https://www.stoffbook.de/images/gross/727045-201.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
-	<div class="hero-content">
+         style="background-image: url(https://www.stoffbook.de/images/gross/727045-201.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+    <div class="hero-content">
 
-		<div class="container">
-			<div class="row">
-				<div class="text-center">
-					<h1>Checkout</h1>
-					<div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="text-center">
+                    <h1>Checkout</h1>
+                    <div class="breadcrumbs">
 						<span class="item">
 							<a href="index.html">Home > </a>
 						</span>
-						<span class="item text-decoration-underline">Checkout</span>
+                        <span class="item text-decoration-underline">Checkout</span>
 
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </section>
+{{^orderNowPlushie}}
 {{#cartIsEmpty}}
 <div class="alert alert-danger" role="alert">
-	Your cart is empty. Please add items to your cart before proceeding to checkout.
+    Your cart is empty. Please add items to your cart before proceeding to checkout.
 </div>
 {{/cartIsEmpty}}
+{{/orderNowPlushie}}
 <section class="checkout-wrap padding-medium">
-	<div class="container">
-		<div class="row d-flex flex-wrap">
-			<div class="col-lg-6">
-				<h3 class="mb-3">Billing Details</h3>
-				<form id="orderForm" class="billing-details">
-					<label for="fname">First Name*</label>
-					<input type="text" id="fname" name="firstname" class="form-control mt-2 mb-4 ps-3" required>
+    <div class="container">
+        <div class="row d-flex flex-wrap">
+            <div class="col-lg-6">
+                <h3 class="mb-3">Billing Details</h3>
+                <form id="orderForm" class="billing-details">
+                    <label for="fname">First Name*</label>
+                    <input type="text" id="fname" name="firstname" class="form-control mt-2 mb-4 ps-3" required>
 
-					<label for="lname">Last Name*</label>
-					<input type="text" id="lname" name="lastname" class="form-control mt-2 mb-4 ps-3" required>
+                    <label for="lname">Last Name*</label>
+                    <input type="text" id="lname" name="lastname" class="form-control mt-2 mb-4 ps-3" required>
 
-					<label for="cname">Company Name (optional)</label>
-					<input type="text" id="cname" name="companyname" class="form-control mt-2 mb-4">
+                    <label for="cname">Company Name (optional)</label>
+                    <input type="text" id="cname" name="companyname" class="form-control mt-2 mb-4">
 
-					<label for="country">Country / Region*</label>
-					<select id="country" name="country" class="form-select form-control mt-2 mb-4" required>
-						<option value="" hidden selected>Select your country</option>
-						<option value="United States">United States</option>
-						<option value="UK">UK</option>
-						<option value="Australia">Australia</option>
-						<option value="Canada">Canada</option>
-					</select>
+                    <label for="country">Country / Region*</label>
+                    <select id="country" name="country" class="form-select form-control mt-2 mb-4" required>
+                        <option value="" hidden selected>Select your country</option>
+                        <option value="United States">United States</option>
+                        <option value="UK">UK</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Canada">Canada</option>
+                    </select>
 
-					<label for="adr1">Street Address*</label>
-					<input type="text" id="adr1" name="address" placeholder="House number and street name" class="form-control mt-3 ps-3 mb-3" required>
+                    <label for="adr1">Street Address*</label>
+                    <input type="text" id="adr1" name="address" placeholder="House number and street name"
+                           class="form-control mt-3 ps-3 mb-3" required>
 
-					<input type="text" id="adr2" name="address2" placeholder="Appartments, suite, etc." class="form-control ps-3 mb-4">
+                    <input type="text" id="adr2" name="address2" placeholder="Appartments, suite, etc."
+                           class="form-control ps-3 mb-4">
 
-					<label for="city">Town / City *</label>
-					<input type="text" id="city" name="city" class="form-control mt-3 ps-3 mb-4" required>
+                    <label for="city">Town / City *</label>
+                    <input type="text" id="city" name="city" class="form-control mt-3 ps-3 mb-4" required>
 
-					<label for="state">State *</label>
-					<select id="state" name="state" class="form-select form-control mt-2 mb-4" required>
-						<option value="" hidden selected>Select your state</option>
-						<option value="Florida">Florida</option>
-						<option value="New York">New York</option>
-						<option value="Chicago">Chicago</option>
-						<option value="Texas">Texas</option>
-						<option value="San Jose">San Jose</option>
-						<option value="Houston">Houston</option>
-					</select>
+                    <label for="state">State *</label>
+                    <select id="state" name="state" class="form-select form-control mt-2 mb-4" required>
+                        <option value="" hidden selected>Select your state</option>
+                        <option value="Florida">Florida</option>
+                        <option value="New York">New York</option>
+                        <option value="Chicago">Chicago</option>
+                        <option value="Texas">Texas</option>
+                        <option value="San Jose">San Jose</option>
+                        <option value="Houston">Houston</option>
+                    </select>
 
-					<label for="zip">Zip Code *</label>
-					<input type="text" id="zip" name="zip" class="form-control mt-2 mb-4 ps-3" required>
+                    <label for="zip">Zip Code *</label>
+                    <input type="text" id="zip" name="zip" class="form-control mt-2 mb-4 ps-3" required>
 
-					<label for="phone">Phone *</label>
-					<input type="text" id="phone" name="phone" class="form-control mt-2 mb-4 ps-3" required>
+                    <label for="phone">Phone *</label>
+                    <input type="text" id="phone" name="phone" class="form-control mt-2 mb-4 ps-3" required>
 
-					<label for="email">Email address *</label>
-					<input type="email" id="email" name="email" class="form-control mt-2 mb-4 ps-3" required>
-					{{^cartIsEmpty}}
-					<button type="submit" name="submit" class="btn" onclick="validateAndSubmit(event)">Place an order</button>
-					{{/cartIsEmpty}}
-				</form>
-			</div>
-			<div class="col-lg-6">
-				<div>
-					<h3 class="mb-3">Additional Information</h3>
-					<div class="billing-details">
-						<label for="orderNotes">Order notes (optional)</label>
-						<textarea id="orderNotes" class="form-control pt-3 pb-3 ps-3 mt-2"
-								  placeholder="Notes about your order. Like special notes for delivery."></textarea>
-					</div>
-				</div>
-				{{^cartIsEmpty}}
-				<div class="cart-totals padding-medium pb-0">
-					<h3 class="mb-3">Cart Totals</h3>
-					<div class="articles-list mt-3">
-						<h4>Articles</h4>
-						<table cellspacing="0" class="table text-capitalize">
-							<thead>
-							<tr>
-								<th>Image</th>
-								<th>Name</th>
-								<th>Price</th>
-								<th>Quantity</th>
-							</tr>
-							</thead>
-							<tbody>
-							{{#cartItems}}
-							<tr>
-								<td><img src="{{imageOnInspect}}" alt="{{name}}" style="width:50px;height:50px;"></td>
-								<td>{{name}}</td>
-								<td><span class="price-currency-symbol">$</span>{{price}}</td>
-								<td>{{quantity}}</td>
-							</tr>
-							{{/cartItems}}
-							</tbody>
-						</table>
-					</div>
-					<div class="total-price pb-3">
-						<table cellspacing="0" class="table text-capitalize">
-							<tbody>
-							<tr class="subtotal pt-2 pb-2 border-top border-bottom">
-								<th>Subtotal</th>
-								<td data-title="Subtotal">
+                    <label for="email">Email address *</label>
+                    <input type="email" id="email" name="email" class="form-control mt-2 mb-4 ps-3" required>
+
+
+                    {{#orderNowPlushie}}
+                    <button type="submit" name="submit" class="btn" onclick="validateAndSubmit(event, true)">Place an
+                        order
+                    </button>
+                    {{/orderNowPlushie}}
+
+                    {{^orderNowPlushie}}
+                    {{^cartIsEmpty}}
+                    <button type="submit" name="submit" class="btn" onclick="validateAndSubmit(event, false)">Place an
+                        order
+                    </button>
+                    {{/cartIsEmpty}}
+                    {{/orderNowPlushie}}
+
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <div>
+                    <h3 class="mb-3">Additional Information</h3>
+                    <div class="billing-details">
+                        <label for="orderNotes">Order notes (optional)</label>
+                        <textarea id="orderNotes" class="form-control pt-3 pb-3 ps-3 mt-2"
+                                  placeholder="Notes about your order. Like special notes for delivery."></textarea>
+                    </div>
+                </div>
+                {{^orderNowPlushie}}
+                {{^cartIsEmpty}}
+                <div class="cart-totals padding-medium pb-0">
+                    <h3 class="mb-3">Cart Totals</h3>
+                    <div class="articles-list mt-3">
+                        <h4>Articles</h4>
+                        <table cellspacing="0" class="table text-capitalize">
+                            <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#cartItems}}
+                            <tr>
+                                <td><img src="{{imageOnInspect}}" alt="{{name}}" style="width:50px;height:50px;"></td>
+                                <td>{{name}}</td>
+                                <td><span class="price-currency-symbol">$</span>{{price}}</td>
+                                <td>{{quantity}}</td>
+                            </tr>
+                            {{/cartItems}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="total-price pb-3">
+                        <table cellspacing="0" class="table text-capitalize">
+                            <tbody>
+                            <tr class="subtotal pt-2 pb-2 border-top border-bottom">
+                                <th>Subtotal</th>
+                                <td data-title="Subtotal">
 									<span class="price-amount amount text-primary ps-5 fw-light">
 										<bdi>
 											<span class="price-currency-symbol">$</span>{{cartSubtotalPrice}}
 										</bdi>
 									</span>
-								</td>
-							</tr>
-							<tr class="tax pt-2 pb-2 border-bottom">
-								<th>Tax</th>
-								<td data-title="Tax">
+                                </td>
+                            </tr>
+                            <tr class="tax pt-2 pb-2 border-bottom">
+                                <th>Tax</th>
+                                <td data-title="Tax">
 									<span class="price-amount amount text-primary ps-5 fw-light">
 										<bdi>{{taxOnDisplay}}</bdi>
 									</span>
-								</td>
-							</tr>
-							<tr class="shipping pt-2 pb-2 border-bottom">
-								<th>Shipping</th>
-								<td data-title="Shipping">
+                                </td>
+                            </tr>
+                            <tr class="shipping pt-2 pb-2 border-bottom">
+                                <th>Shipping</th>
+                                <td data-title="Shipping">
 									<span class="price-amount amount text-primary ps-5 fw-light">
 										<bdi>
 											<span class="price-currency-symbol">$</span>{{shippingCosts}}</bdi>
 									</span>
-								</td>
-							</tr>
-							<tr class="order-total pt-2 pb-2 border-bottom">
-								<th>Total</th>
-								<td data-title="Total">
+                                </td>
+                            </tr>
+                            <tr class="order-total pt-2 pb-2 border-bottom">
+                                <th>Total</th>
+                                <td data-title="Total">
 									<span class="price-amount amount text-primary ps-5 fw-light">
 										<bdi>
 											<span class="price-currency-symbol">$</span>{{grandTotal}}</bdi>
 									</span>
-								</td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				{{/cartIsEmpty}}
-				<div class="list-group">
-					<label class="list-group-item d-flex gap-2 border-0">
-						<input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
-							   id="paymentMethod1" value="Direct bank transfer" checked>
-						<span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{/cartIsEmpty}}
+                {{/orderNowPlushie}}
+                {{#orderNowPlushie}}
+                <div class="cart-totals padding-medium pb-0">
+                    <h3 class="mb-3">Cart Totals</h3>
+                    <div class="articles-list mt-3">
+                        <h4>Articles</h4>
+                        <table cellspacing="0" class="table text-capitalize">
+                            <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><img src="{{imageOnInspect}}" alt="{{name}}" style="width:50px;height:50px;"></td>
+                                <td>{{name}}</td>
+                                <td><span class="price-currency-symbol">$</span>{{priceInOrderNow}}</td>
+                                <td>{{quantityInOrderNow}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="total-price pb-3">
+                        <table cellspacing="0" class="table text-capitalize">
+                            <tbody>
+                            <tr class="subtotal pt-2 pb-2 border-top border-bottom">
+                                <th>Subtotal</th>
+                                <td data-title="Subtotal">
+									<span class="price-amount amount text-primary ps-5 fw-light">
+										<bdi>
+											<span class="price-currency-symbol">$</span>{{priceInOrderNow}}
+										</bdi>
+									</span>
+                                </td>
+                            </tr>
+                            <tr class="tax pt-2 pb-2 border-bottom">
+                                <th>Tax</th>
+                                <td data-title="Tax">
+									<span class="price-amount amount text-primary ps-5 fw-light">
+										<bdi>{{taxesInOrder}}</bdi>
+									</span>
+                                </td>
+                            </tr>
+                            <tr class="shipping pt-2 pb-2 border-bottom">
+                                <th>Shipping</th>
+                                <td data-title="Shipping">
+									<span class="price-amount amount text-primary ps-5 fw-light">
+										<bdi>
+											<span class="price-currency-symbol">$</span>{{shippingCostsInOrder}}</bdi>
+									</span>
+                                </td>
+                            </tr>
+                            <tr class="order-total pt-2 pb-2 border-bottom">
+                                <th>Total</th>
+                                <td data-title="Total">
+									<span class="price-amount amount text-primary ps-5 fw-light">
+										<bdi>
+											<span class="price-currency-symbol">$</span>{{OrderNowGrandTotal}}</bdi>
+									</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{/orderNowPlushie}}
+                <div class="list-group">
+                    <label class="list-group-item d-flex gap-2 border-0">
+                        <input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
+                               id="paymentMethod1" value="Direct bank transfer" checked>
+                        <span>
 							<p class="mb-1">Direct bank transfer</p>
 							<small>Make your payment directly into our bank account. Please use your Order ID. Your order will
 								be shipped after funds have cleared in our account.</small>
 						</span>
-					</label>
-					<label class="list-group-item d-flex gap-2 border-0">
-						<input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
-							   id="paymentMethod2" value="Check payments">
-						<span>
+                    </label>
+                    <label class="list-group-item d-flex gap-2 border-0">
+                        <input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
+                               id="paymentMethod2" value="Check payments">
+                        <span>
 							<p class="mb-1">Check payments</p>
 							<small>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store
 								Postcode.</small>
 						</span>
-					</label>
-					<label class="list-group-item d-flex gap-2 border-0">
-						<input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
-							   id="paymentMethod3" value="Cash on delivery">
-						<span>
+                    </label>
+                    <label class="list-group-item d-flex gap-2 border-0">
+                        <input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
+                               id="paymentMethod3" value="Cash on delivery">
+                        <span>
 							<p class="mb-1">Cash on delivery</p>
 							<small>Pay with cash upon delivery.</small>
 						</span>
-					</label>
-					<label class="list-group-item d-flex gap-2 border-0">
-						<input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
-							   id="paymentMethod4" value="Paypal">
-						<span>
+                    </label>
+                    <label class="list-group-item d-flex gap-2 border-0">
+                        <input class="form-check-input flex-shrink-0" type="radio" name="paymentMethod"
+                               id="paymentMethod4" value="Paypal">
+                        <span>
 							<p class="mb-1">Paypal</p>
 							<small>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</small>
 						</span>
-					</label>
-				</div>
-			</div>
-		</div>
-	</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <script>
 
-	document.addEventListener('DOMContentLoaded', (event) => {
-		let orderCount = 0;
+    document.addEventListener('DOMContentLoaded', (event) => {
+        let orderCount = 0;
 
-		async function SubmitOrder() {
-			orderCount++;
-			localStorage.setItem('orderCount', orderCount);
+        async function SubmitOrder(fromOrderNow) {
+            console.log(fromOrderNow)
+            orderCount++;
+            localStorage.setItem('orderCount', orderCount);
 
-			const billingDetails = {
-				firstname: document.getElementById('fname').value,
-				lastname: document.getElementById('lname').value,
-				companyname: document.getElementById('cname').value,
-				country: document.getElementById('country').value,
-				address: document.getElementById('adr1').value,
-				address2: document.getElementById('adr2').value,
-				city: document.getElementById('city').value,
-				state: document.getElementById('state').value,
-				zip: document.getElementById('zip').value,
-				phone: document.getElementById('phone').value,
-				email: document.getElementById('email').value,
-				paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
-			};
-			console.log(billingDetails.paymentMethod);
+            const billingDetails = {
+                firstname: document.getElementById('fname').value,
+                lastname: document.getElementById('lname').value,
+                companyname: document.getElementById('cname').value,
+                country: document.getElementById('country').value,
+                address: document.getElementById('adr1').value,
+                address2: document.getElementById('adr2').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                zip: document.getElementById('zip').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+            };
+            console.log(billingDetails.paymentMethod);
+            if (fromOrderNow === false) {
+                try {
+                    var cartResponse = await fetch('/api/cart');
+                    var cart = await cartResponse.json();
 
-			try {
-				var cartResponse = await fetch('/api/cart');
-				var cart = await cartResponse.json();
+                    let response = await fetch('/api/addCartToOrder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(billingDetails)
+                    });
 
-				let response = await fetch('/api/addCartToOrder', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(billingDetails)
-				});
+                    if (response.ok) {
+                        console.log('Cart added to Order successfully!');
+                        response.json().then(data => {
+                            console.log(data);
+                            orderCount = parseInt(data);
+                            window.location.href = `/order.html?orderCount=${orderCount}`;
+                        });
+                    } else {
+                        console.error('Failed to add Cart to Order');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                const articleNo = urlParams.get('articleNo');
+                const quantity = urlParams.get('quantity');
+                let intArticleNo = parseInt(articleNo);
+                let intQuantity = parseInt(quantity);
+                let articleResponse = await fetch('/api/article?id=' + intArticleNo)
+                    .then(response => response.json())
+                    .then(data => {
 
-				if (response.ok) {
-					console.log('Cart added to Order successfully!');
-					response.json().then(data => {
-						console.log(data);
-						orderCount = parseInt(data);
-						window.location.href = `/order.html?orderCount=${orderCount}`;
-					});
-				} else {
-					console.error('Failed to add Cart to Order');
-				}
-			} catch (error) {
-				console.error('Error:', error);
-			}
-		}
+                        if (data.inStock < intQuantity)
+                        {
+                            intQuantity = data.inStock
+                        }
 
-		function validateAndSubmit(event) {
-			event.preventDefault();
-			const form = document.getElementById('orderForm');
+                    })
+                    .catch(error => console.error('Error:', error));
 
-			if (form.checkValidity()) {
-				SubmitOrder();
-			} else {
-				form.reportValidity();
-			}
-		}
+                try {
+                    let response = await fetch(`/api/addItemToOrder?id=${intArticleNo}&quantity=${intQuantity}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(billingDetails)
+                    });
 
-		window.validateAndSubmit = validateAndSubmit;
-	});
+                    if (response.ok) {
+                        console.log('Cart added to Order successfully!');
+                        response.json().then(data => {
+                            console.log(data);
+                            orderCount = parseInt(data);
+                            window.location.href = `/order.html?orderCount=${orderCount}`;
+                        });
+                    } else {
+                        console.error('Failed to add Cart to Order');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        }
+
+
+        function validateAndSubmit(event, fromOrderNow) {
+            event.preventDefault();
+            const form = document.getElementById('orderForm');
+
+            if (form.checkValidity()) {
+                SubmitOrder(fromOrderNow);
+            } else {
+                form.reportValidity();
+            }
+        }
+
+        window.validateAndSubmit = validateAndSubmit;
+    });
 </script>
 
 {{> partials/footer }}
-
 
 
 </body>

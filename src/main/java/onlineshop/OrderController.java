@@ -1,5 +1,6 @@
 package onlineshop;
 
+import onlineshop.merchandise.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 @RequestMapping("/api")
 public class OrderController {
 
-    /** Shows the count of the order */
+    /**
+     * Shows the count of the order
+     */
     protected int orderCount = 1;
 
     @Autowired
@@ -42,5 +45,37 @@ public class OrderController {
         String orderCountString = String.valueOf(orderCount++);
         return ResponseEntity.ok(orderCountString);
     }
+
+    @PostMapping("/addItemToOrder")
+    public ResponseEntity<String> addItemToOrder(
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) Integer quantity,
+            @RequestBody BillingDetails billingDetails) {
+        
+        Order order = new Order(billingDetails);
+        
+        Article item = (Article) Shop.getPlushiebyID(id);
+
+        Article itemInOrder = new Article(item);
+
+        if (quantity != null) {
+            itemInOrder.setQuantity(quantity);
+        } else {
+            itemInOrder.setQuantity(1);
+        }
+
+
+        order.addItemToOrder(itemInOrder);
+        order.setOrderNumber(orderCount);
+        customer.addToOrder(order);
+        cart.changeStockage(order.getOrder_items());
+        String orderCountString = String.valueOf(orderCount++);
+        
+        item.setQuantity(1);
+
+        return ResponseEntity.ok(orderCountString);
+    }
+
+
 
 }

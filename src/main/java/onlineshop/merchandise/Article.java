@@ -1,5 +1,7 @@
 package onlineshop.merchandise;
 
+import onlineshop.Shop;
+
 import java.util.Objects;
 
 public class Article {
@@ -65,6 +67,18 @@ public class Article {
 
   }
 
+  public Article(Article other) {
+    this.articleNo = other.articleNo; // Generally, you might want to assign a new articleNo
+    this.name = other.name;
+    this.price = other.price;
+    this.priceOnSale = other.priceOnSale;
+    this.image = other.image;
+    this.imageOnInspect = other.imageOnInspect;
+    this.inStock = other.inStock;
+    this.quantity = other.quantity;
+    this.showQuantity = other.showQuantity;
+  }
+
   public int getArticleNo() {
     return articleNo;
   }
@@ -98,13 +112,16 @@ public class Article {
     return quantity;
   }
   public void setQuantity(int quantity) {
-    if (quantity > 0){
+    if (quantity > 0 && quantity <= getInStock()){
       this.quantity = quantity;
     }
   }
 
   public void incrementQuantity() {
-    this.quantity++;
+    int increasedQuantity = quantity + 1;
+    if (increasedQuantity < getInStock()) {
+      this.quantity++;
+    }
   }
 
   public void decrementQuantity() {
@@ -126,6 +143,9 @@ public class Article {
   }
 
   public int getInStock() {
+    if (inStock <= 0) {
+      Shop.removeArticle(getArticleNo());
+    }
     return inStock;
   }
   public void setInStock(int inStock) {

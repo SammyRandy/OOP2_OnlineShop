@@ -1,6 +1,7 @@
 package onlineshop;
 
 import onlineshop.enums.ShoppingCost;
+import onlineshop.merchandise.Article;
 import onlineshop.merchandise.Plushies;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,8 +53,13 @@ public class ShopController {
     public String homePage(Model model,
                            @RequestParam(value = "page", defaultValue = "1") int page,
                            @RequestParam(value = "sort", defaultValue = "") String sort) {
-        List<Plushies> allArticles = Shop.getArticles();
 
+        List<Plushies> allArticles = Shop.getArticles();
+        for (Plushies p : allArticles) {
+            if (p.getInStock() <= 0){
+                Shop.removeArticle(p.getArticleNo());
+            }
+        }
         // Sorting
         switch (sort) {
             case "nameAsc":
@@ -143,16 +149,38 @@ public class ShopController {
      * @return The name of the view to display.
      */
     @GetMapping(value = {"/checkout.html"})
-    public String checkoutPage(Model model) {
+    public String checkoutPage(@RequestParam(required = false) Integer articleNo, @RequestParam(required = false) Integer quantity, Model model) {
         if (cart.getCartSize() == 0) {
             model.addAttribute("cartIsEmpty", true);
         } else {
             model.addAttribute("cartIsEmpty", false);
         }
+        // Add the articleNo to the model if it's provided
+        if (articleNo != null) {
+            Article orderNowPlushie = (Article) Shop.getPlushiebyID(articleNo);
+            if (quantity > orderNowPlushie.getInStock()) {
+                quantity = orderNowPlushie.getInStock();
+            }
+            double price = orderNowPlushie.getPrice() * quantity;
+            price = Math.round(price * 100.0) / 100.0;
+
+            double shippingCosts = ShoppingCost.SHIPPING.getValue();
+            double taxes = ShoppingCost.TAX_RATE.getValue();
+
+            String taxOnDisplay = (int) (taxes * 100) + "%";
+            double OrderNowGrandTotal = Math.round((price+ shippingCosts + (price * taxes)) * 100) / 100.0;
+            model.addAttribute("orderNowPlushie", orderNowPlushie);
+            model.addAttribute("quantityInOrderNow", quantity);
+            model.addAttribute("priceInOrderNow", price);
+            model.addAttribute("shippingCostsInOrder", shippingCosts);
+            model.addAttribute("taxesInOrder", taxOnDisplay);
+            model.addAttribute("OrderNowGrandTotal", OrderNowGrandTotal);
+        }
         addCartAttributes(model);
         addCartPriceAttributes(model);
         return "checkout";
     }
+
 
     /**
      * Displays the order list page.
@@ -201,6 +229,7 @@ public class ShopController {
     public String orderPage(@RequestParam(value = "orderCount", defaultValue = "1") int OrderCount, Model model) {
 
         Order order = customer.getOrderByID(OrderCount);
+        System.out.println("price in orderpage; " + order.getTotal());
         model.addAttribute("orderItems", order.getOrder_items());
         model.addAttribute("orderTotalPrice", order.getTotal());
         model.addAttribute("orderSubtotalPrice", order.getSubTotal());

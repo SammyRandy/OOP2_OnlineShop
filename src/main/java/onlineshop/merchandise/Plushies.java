@@ -127,7 +127,7 @@ public class Plushies extends Article {
     }
 
     public void setInStock(int inStock) {
-        this.inStock = inStock;
+        super.setInStock(inStock);
     }
 
     @Override
