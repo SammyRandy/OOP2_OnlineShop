@@ -8,34 +8,57 @@ import org.springframework.web.context.annotation.SessionScope;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+/**
+ * The Customer class represents a customer in an online shop.
+ */
 @Component
 @SessionScope
 public class Customer {
-    /**
-     * erzeugt für jeden Kunden eine neue Kundennummer
-     */
-    private static Integer customerCounter = 1;
-    /**
-     * wandelt den Date-String in ein {@link Date} um
-     */
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.mm.yyyy");
+    /** Generates a new customer number for each customer. */
+    protected static Integer customerCounter = 1;
 
+    /** Converts the date string into a LocalDate. */
+    protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.mm.yyyy");
+
+    /** Unique customer number */
     protected int customerNo;
+
+    /** First name of the customer */
     protected String firstname;
+
+    /** Surname of the customer */
     protected String surname;
+
+    /** Gender of the customer */
     protected Gender gender;
+
+    /** Birthdate of the customer */
     protected LocalDate birthDate;
+
+    /** Shopping cart of the customer */
     protected Cart cart;
+
+    /** List of orders placed by the customer */
     protected List<Order> orders = new ArrayList<>();
+
+    /** Total amount spent by the customer */
     protected double totalSpend;
 
     public Customer() {
         this.customerNo = customerCounter++;
     }
 
+    /**
+     * Constructs a new Customer object with the specified details.
+     *
+     * @param firstname The first name of the customer.
+     * @param surname   The surname of the customer.
+     * @param gender    The gender of the customer.
+     * @param birthDate The birthdate of the customer in the format "dd.MM.yyyy".
+     * @param cart      The shopping cart of the customer.
+     */
     public Customer(String firstname, String surname, Gender gender, String birthDate, Cart cart) {
         this();
         this.firstname = firstname;
@@ -81,6 +104,13 @@ public class Customer {
     public List<Order> getOrders() {
         return orders;
     }
+
+    /**
+     * Retrieves an order by its ID.
+     *
+     * @param id The ID of the order to retrieve.
+     * @return The order with the specified ID, or null if not found.
+     */
     public Order getOrderByID(int id) {
         id -= 1;
         if (id >= 0 && id < orders.size()) {
@@ -92,6 +122,11 @@ public class Customer {
         }
     }
 
+    /**
+     * Calculates the total amount spent by the customer.
+     *
+     * @return The total amount spent by the customer.
+     */
     public double getTotalSpend() {
         double total = 0;
         for (Order order : orders) {

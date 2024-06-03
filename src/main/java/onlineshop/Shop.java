@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Manages the Shop
+ * Manages the Shop.
  */
 @SpringBootApplication
 public class Shop {
@@ -33,10 +33,10 @@ public class Shop {
     }
 
     /**
-     * Read articles from a CSV file
+     * Reads articles from a CSV file.
      *
-     * @param fileName {@link String}
-     * @param plushies    {@link List}
+     * @param fileName The name of the CSV file to read from.
+     * @param plushies The list to populate with articles read from the CSV file.
      */
     private static void readArticles(String fileName, List<Plushies> plushies) {
         try {
@@ -78,10 +78,21 @@ public class Shop {
         log.info(plushies.size() + " plushies imported");
     }
 
+    /**
+     * Returns an unmodifiable list of all articles. Used for sorting.
+     *
+     * @return An unmodifiable list of all articles.
+     */
     public static List<Plushies> getArticles() {
         return new ArrayList<>(ORIGINAL_PLUSHIES);
     }
 
+    /**
+     * Retrieves a plushie by its article number.
+     *
+     * @param Id The article number of the plushie to retrieve.
+     * @return The plushie with the specified article number, or null if not found.
+     */
     public static Plushies getPlushiebyID(int Id) {
         for (Plushies plushies : PLUSHIES) {
             if (plushies.getArticleNo() == Id) {

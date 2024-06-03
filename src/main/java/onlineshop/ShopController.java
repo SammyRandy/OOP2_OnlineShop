@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * The ShopController class handles requests related to the online shop.
+ */
 @Controller
 public class ShopController {
     private static final int PAGE_SIZE = 12;
@@ -26,17 +29,32 @@ public class ShopController {
     @Autowired
     Customer customer;
 
+    /**
+     * Redirects to the home page.
+     *
+     * @param model The model to add attributes to.
+     * @return The name of the view to redirect to.
+     */
     @GetMapping(value = {"/"})
     public String root(Model model) {
         return "redirect:/index.html";
     }
 
+    /**
+     * Displays the home page.
+     *
+     * @param model The model to add attributes to.
+     * @param page  The current page number.
+     * @param sort  The sorting option.
+     * @return The name of the view to display.
+     */
     @GetMapping(value = {"/index.html"})
     public String homePage(Model model,
                            @RequestParam(value = "page", defaultValue = "1") int page,
                            @RequestParam(value = "sort", defaultValue = "") String sort) {
         List<Plushies> allArticles = Shop.getArticles();
 
+        // Sorting
         switch (sort) {
             case "nameAsc":
                 Collections.sort(allArticles, Comparator.comparing(Plushies::getName));
@@ -62,6 +80,14 @@ public class ShopController {
                 break;
         }
 
+        model.addAttribute("isNameAsc", "nameAsc".equals(sort));
+        model.addAttribute("isNameDesc", "nameDesc".equals(sort));
+        model.addAttribute("isPriceAsc", "priceAsc".equals(sort));
+        model.addAttribute("isPriceDesc", "priceDesc".equals(sort));
+        model.addAttribute("isSizeAsc", "sizeAsc".equals(sort));
+        model.addAttribute("isSizeDesc", "sizeDesc".equals(sort));
+
+        // Pagination
         int totalArticles = allArticles.size();
         int totalPages = (int) Math.ceil((double) totalArticles / PAGE_SIZE);
 
@@ -88,35 +114,19 @@ public class ShopController {
         }
         model.addAttribute("pages", pages);
 
-        model.addAttribute("isNameAsc", "nameAsc".equals(sort));
-        model.addAttribute("isNameDesc", "nameDesc".equals(sort));
-        model.addAttribute("isPriceAsc", "priceAsc".equals(sort));
-        model.addAttribute("isPriceDesc", "priceDesc".equals(sort));
-        model.addAttribute("isSizeAsc", "sizeAsc".equals(sort));
-        model.addAttribute("isSizeDesc", "sizeDesc".equals(sort));
-
         addCartAttributes(model);
-
 
         return "index";
     }
 
 
-/*    @GetMapping(value = {"/cart.html"})
-    public String cartPage(HttpSession session, Model model) {
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new Cart();
-            session.setAttribute("cart", cart);
-        }
-        model.addAttribute("cartItems", cart.getCart_items());
-        model.addAttribute("cartTotalPrice", cart.getGrandTotal());
-        if (cart.getCartSize() > 0) {model.addAttribute("cartSize", cart.getCartSizeByCart(cart));}
-        else {model.addAttribute("cartSize", 0);}
-        return "cart";
-    }*/
-
-
+    /**
+     * Displays the current view of the given name.
+     *
+     * @param name  The given name of the mustache file
+     * @param model The model to add attributes to.
+     * @return The name of the view to display.
+     */
     @GetMapping(value = {"/{name}.html"})
     public String htmlMapping(@PathVariable String name, Model model) {
         addCartAttributes(model);
@@ -125,6 +135,13 @@ public class ShopController {
         return name;
     }
 
+
+    /**
+     * Displays the checkout page.
+     *
+     * @param model The model to add attributes to.
+     * @return The name of the view to display.
+     */
     @GetMapping(value = {"/checkout.html"})
     public String checkoutPage(Model model) {
         if (cart.getCartSize() == 0) {
@@ -133,27 +150,39 @@ public class ShopController {
             model.addAttribute("cartIsEmpty", false);
         }
         addCartAttributes(model);
-
         addCartPriceAttributes(model);
-
-
         return "checkout";
     }
 
+    /**
+     * Displays the order list page.
+     *
+     * @param model The model to add attributes to.
+     * @return The name of the view to display.
+     */
     @GetMapping(value = {"/order-list.html"})
     public String orderlistPage(Model model) {
+
         List<Order> orders = customer.getOrders();
         System.out.println(customer.getTotalSpend());
         model.addAttribute("orders", orders);
         model.addAttribute("ordersTotalSpend", customer.getTotalSpend());
-        addCartAttributes(model);
 
+        addCartAttributes(model);
         return "order-list";
     }
 
 
+    /**
+     * Displays the details page for a specific item.
+     *
+     * @param id    The ID of the item to display details for.
+     * @param model The model to add attributes to.
+     * @return The name of the view to display.
+     */
     @GetMapping(value = {"/details.html"})
     public String detailsPage(@RequestParam int id, Model model) {
+
         Plushies plushie = Shop.getPlushiebyID(id);
         model.addAttribute("plushie", plushie);
 
@@ -161,35 +190,32 @@ public class ShopController {
         return "details";
     }
 
-
-
+    /**
+     * Displays the order page for a specific order.
+     *
+     * @param OrderCount The order number.
+     * @param model      The model to add attributes to.
+     * @return The name of the view to display.
+     */
     @GetMapping(value = {"/order.html"})
-    public String orderPage(@RequestParam (value = "orderCount", defaultValue = "1") int OrderCount, Model model) {
-        Order order = customer.getOrderByID(OrderCount);
+    public String orderPage(@RequestParam(value = "orderCount", defaultValue = "1") int OrderCount, Model model) {
 
+        Order order = customer.getOrderByID(OrderCount);
         model.addAttribute("orderItems", order.getOrder_items());
         model.addAttribute("orderTotalPrice", order.getTotal());
         model.addAttribute("orderSubtotalPrice", order.getSubTotal());
 
         addCartAttributes(model);
-        addOrderPriceAttributes(model, order);
 
+        addOrderPriceAttributes(model, order);
         return "order";
     }
 
-/*    @GetMapping(value = {"/checkout.html"})
-    public String checkOut(Model model) {
-        model.addAttribute("cartItems", cart.getCart_items());
-        model.addAttribute("cartTotalPrice", cart.getGrandTotal());
-        model.addAttribute("cartSubtotalPrice", cart.getSubTotal());
-        if (cart.getCartSize() > 0) {
-            model.addAttribute("cartSize", cart.getCartSizeByCart(cart));
-        } else {
-            model.addAttribute("cartSize", 0);
-        }
-        return "checkout";
-    }*/
-
+    /**
+     * Adds cart attributes to the model.
+     *
+     * @param model The model to add attributes to.
+     */
     private void addCartAttributes(Model model) {
         model.addAttribute("cartItems", cart.getCart_items());
         model.addAttribute("cartTotalPrice", cart.getGrandTotal());
@@ -197,31 +223,37 @@ public class ShopController {
         model.addAttribute("cartSize", cart.getCartSize() > 0 ? cart.getCartSizeByCart(cart) : 0);
     }
 
+    /**
+     * Adds cart price attributes to the model.
+     *
+     * @param model The model to add attributes to.
+     */
     private void addCartPriceAttributes(Model model) {
         double shippingCosts = ShoppingCost.SHIPPING.getValue();
         double taxes = ShoppingCost.TAX_RATE.getValue();
-        String taxOnDisplay = (int)(taxes * 100) + "%";
+        String taxOnDisplay = (int) (taxes * 100) + "%";
         double CartGrandTotal = Math.round((cart.getGrandTotal() + shippingCosts + (cart.getGrandTotal() * taxes)) * 100) / 100.0;
-
-
         model.addAttribute("shippingCosts", shippingCosts);
         model.addAttribute("taxOnDisplay", taxOnDisplay);
         model.addAttribute("grandTotal", CartGrandTotal);
-
-
     }
 
+    /**
+     * Adds order price attributes to the model.
+     *
+     * @param model The model to add attributes to.
+     * @param order The order to calculate prices for.
+     */
     private void addOrderPriceAttributes(Model model, Order order) {
         double shippingCosts = ShoppingCost.SHIPPING.getValue();
         double taxes = ShoppingCost.TAX_RATE.getValue();
-        String taxOnDisplay = (int)(taxes * 100) + "%";
+        String taxOnDisplay = (int) (taxes * 100) + "%";
         double orderGrandTotal = Math.round((order.getTotal() + shippingCosts + (order.getTotal() * taxes)) * 100) / 100.0;
-
         model.addAttribute("shippingCosts", shippingCosts);
         model.addAttribute("taxOnDisplay", taxOnDisplay);
         model.addAttribute("orderGrandTotal", orderGrandTotal);
-
     }
+
 
     static class Page {
         private final int number;

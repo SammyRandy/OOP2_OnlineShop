@@ -1,18 +1,39 @@
 package onlineshop;
 
+/**
+ * The BillingDetails class represents the details of a billing address and payment method for an online shop.
+ */
+
 public class BillingDetails {
-    private String firstname;
-    private String lastname;
-    private String companyname;
-    private String country;
-    private String address;
-    private String address2;
-    private String city;
-    private String state;
-    private String zip;
-    private String phone;
-    private String email;
-    private String paymentMethod;
+    protected String firstname;
+    protected String lastname;
+    protected String companyname;
+    protected String country;
+    protected String address;
+    protected String address2;
+    protected String city;
+    protected String state;
+    protected String zip;
+    protected String phone;
+    protected String email;
+    protected String paymentMethod;
+
+    /**
+     * Constructs a new BillingDetails object with the specified details.
+     *
+     * @param firstname    The first name of the customer.
+     * @param lastname     The last name of the customer.
+     * @param companyname  The name of the company (if applicable).
+     * @param country      The country of the billing address.
+     * @param address      The street address of the billing address.
+     * @param address2     Additional address information (if applicable).
+     * @param city         The city of the billing address.
+     * @param state        The state or region of the billing address.
+     * @param zip          The ZIP or postal code of the billing address.
+     * @param phone        The phone number associated with the billing address.
+     * @param email        The email address associated with the billing details.
+     * @param paymentMethod The payment method used for the transaction.
+     */
 
     public BillingDetails(String firstname, String lastname, String companyname, String country, String address, String address2, String city, String state, String zip, String phone, String email, String paymentMethod) {
         this.firstname = firstname;

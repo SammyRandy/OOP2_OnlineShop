@@ -59,7 +59,7 @@
                                         <div class="card-price">
                                             {{#price}}
                                             <span class="price text-primary fw-light"
-                                                  data-currency-usd="{{PricePerUnit}}}">{{PricePerUnit}}</span>
+                                                  data-currency-usd="$">${{PricePerUnit}}</span>
                                             {{/price}}
                                         </div>
                                     </div>
@@ -102,7 +102,7 @@
                                 <div class="col-md-4">
                                     <div class="total-price">
                                         {{#price}}
-                                        <span class="money fs-2 fw-light text-primary">{{price}}</span>
+                                        <span class="money fs-2 fw-light text-primary"><span class="price-currency-symbol">$</span>{{price}}</span>
                                         {{/price}}
                                     </div>
                                 </div>
@@ -179,6 +179,7 @@
 </section>
 <script>
 
+
     async function changeQuantitybyButtons(button, increment) {
         var item_num = button.getAttribute('data-article-id');
 
@@ -236,6 +237,10 @@
 
     async function changeQuantity(input) {
         var quantityValue = input.value;
+
+        if (quantityValue === 0){
+            quantityValue = 1;
+        }
 
         var item_num = input.getAttribute('data-article-id');
 
