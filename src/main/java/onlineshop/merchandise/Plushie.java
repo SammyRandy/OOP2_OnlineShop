@@ -3,7 +3,7 @@ package onlineshop.merchandise;
 /**
  * The Plushies class represents a type of merchandise, specifically plush toys, in an online shop.
  */
-public class Plushies extends Article {
+public class Plushie extends Article {
     /** Name of the plushie */
     protected String name;
 
@@ -34,7 +34,7 @@ public class Plushies extends Article {
     /** String representation of the size of the plushie */
     protected String stringSize;
 
-    public Plushies() {
+    public Plushie() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class Plushies extends Article {
      * @param image         The URL to the resized image of the article.
      * @param imageOnInspect The URL to the original image of the article.
      */
-    public Plushies(String name, String type, int height, int length, int width, double price, int inStock, String image, String imageOnInspect) {
+    public Plushie(String name, String type, int height, int length, int width, double price, int inStock, String image, String imageOnInspect) {
         super(0, name, price, image, 1, false, imageOnInspect, inStock);
 
         // Set additional properties specific to Plushie

@@ -2,7 +2,7 @@ package onlineshop;
 
 import onlineshop.enums.ShoppingCost;
 import onlineshop.merchandise.Article;
-import onlineshop.merchandise.Plushies;
+import onlineshop.merchandise.Plushie;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +55,8 @@ public class ShopController {
                            @RequestParam(value = "sort", defaultValue = "") String sort) {
 
         // Remove all Articles out of stock
-        List<Plushies> allArticles = Shop.getArticles();
-        for (Plushies p : allArticles) {
+        List<Plushie> allArticles = Shop.getArticles();
+        for (Plushie p : allArticles) {
             if (p.getInStock() <= 0){
                 Shop.removeArticle(p.getArticleNo());
             }
@@ -64,22 +64,22 @@ public class ShopController {
         // Sorting
         switch (sort) {
             case "nameAsc":
-                Collections.sort(allArticles, Comparator.comparing(Plushies::getName));
+                Collections.sort(allArticles, Comparator.comparing(Plushie::getName));
                 break;
             case "nameDesc":
-                Collections.sort(allArticles, Comparator.comparing(Plushies::getName).reversed());
+                Collections.sort(allArticles, Comparator.comparing(Plushie::getName).reversed());
                 break;
             case "priceAsc":
-                Collections.sort(allArticles, Comparator.comparingDouble(Plushies::getPrice));
+                Collections.sort(allArticles, Comparator.comparingDouble(Plushie::getPrice));
                 break;
             case "priceDesc":
-                Collections.sort(allArticles, Comparator.comparingDouble(Plushies::getPrice).reversed());
+                Collections.sort(allArticles, Comparator.comparingDouble(Plushie::getPrice).reversed());
                 break;
             case "sizeAsc":
-                Collections.sort(allArticles, Comparator.comparingDouble(Plushies::getSize).reversed());
+                Collections.sort(allArticles, Comparator.comparingDouble(Plushie::getSize).reversed());
                 break;
             case "sizeDesc":
-                Collections.sort(allArticles, Comparator.comparingDouble(Plushies::getSize));
+                Collections.sort(allArticles, Comparator.comparingDouble(Plushie::getSize));
                 break;
             default:
                 sort = ""; // Reset to default sorting if none selected
@@ -101,7 +101,7 @@ public class ShopController {
         int start = (page - 1) * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, totalArticles);
 
-        List<Plushies> paginatedArticles = allArticles.subList(start, end);
+        List<Plushie> paginatedArticles = allArticles.subList(start, end);
 
         model.addAttribute("articles", paginatedArticles);
         model.addAttribute("currentPage", page);
@@ -212,7 +212,7 @@ public class ShopController {
     @GetMapping(value = {"/details.html"})
     public String detailsPage(@RequestParam int id, Model model) {
 
-        Plushies plushie = Shop.getPlushiebyID(id);
+        Plushie plushie = Shop.getPlushiebyID(id);
         model.addAttribute("plushie", plushie);
 
         addCartAttributes(model);

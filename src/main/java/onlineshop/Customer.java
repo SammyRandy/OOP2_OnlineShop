@@ -132,6 +132,7 @@ public class Customer {
         for (Order order : orders) {
             total += order.getGrandTotal();
         }
+        total = Math.round(total * 100.0) / 100.0;
         return total;
     }
 

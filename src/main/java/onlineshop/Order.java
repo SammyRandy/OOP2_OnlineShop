@@ -238,7 +238,6 @@ public class Order {
     public Article getOrder_item(int articleNo) {
         for (Article item : items) {
             if (item.getArticleNo() == articleNo) {
-                System.out.println("quantity in getorddertiem: " + item.getQuantity());
                 return item;
             }
         }

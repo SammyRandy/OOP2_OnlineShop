@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import onlineshop.merchandise.Article;
-import onlineshop.merchandise.Plushies;
+import onlineshop.merchandise.Plushie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -111,7 +111,7 @@ public class CartController {
      * @return The plushie with the specified ID.
      */
     @GetMapping("/article")
-    public Plushies getArticlebyId(@RequestParam int id) {
+    public Plushie getArticlebyId(@RequestParam int id) {
         return Shop.getPlushiebyID(id);
     }
 
@@ -121,7 +121,7 @@ public class CartController {
      * @return A list of all plushies.
      */
     @GetMapping("/articles")
-    public List<Plushies> getArticles() {
+    public List<Plushie> getArticles() {
         return Shop.getArticles();
     }
 

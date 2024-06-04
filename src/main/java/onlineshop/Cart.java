@@ -1,13 +1,12 @@
 package onlineshop;
 
 import onlineshop.merchandise.Article;
-import onlineshop.merchandise.Plushies;
+import onlineshop.merchandise.Plushie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The Cart class represents a shopping cart for an online shop.
@@ -182,7 +181,7 @@ public class Cart {
      */
     public void changeStockage(List<Article> Items) {
         for (Article item : Items) {
-            for (Plushies plushies : Shop.getArticles()) {
+            for (Plushie plushies : Shop.getArticles()) {
                 if (plushies.getArticleNo() == item.getArticleNo()) {
                     int newStock = plushies.getInStock() - item.getQuantity();
                     if (newStock >= 0) {

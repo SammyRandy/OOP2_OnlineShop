@@ -1,7 +1,6 @@
 package onlineshop;
 
-import onlineshop.merchandise.Article;
-import onlineshop.merchandise.Plushies;
+import onlineshop.merchandise.Plushie;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.logging.log4j.LogManager;
@@ -21,12 +20,12 @@ import java.util.List;
 @SpringBootApplication
 public class Shop {
     private final static String RESOURCES = "src/main/resources/";
-    private final static String CSV_FILE = "books.csv";
+    private final static String CSV_FILE = "plushies.csv";
 
     private static Logger log = LogManager.getLogger(Shop.class);
-    private final static List<Plushies> PLUSHIES = new ArrayList<>(220);
+    private final static List<Plushie> PLUSHIES = new ArrayList<>(220);
 
-    private static List<Plushies> ORIGINAL_PLUSHIES = Collections.unmodifiableList(PLUSHIES);
+    private static List<Plushie> ORIGINAL_PLUSHIES = Collections.unmodifiableList(PLUSHIES);
 
     public static void main(String[] args) {
         readArticles(CSV_FILE, PLUSHIES);
@@ -39,7 +38,7 @@ public class Shop {
      * @param fileName The name of the CSV file to read from.
      * @param plushies The list to populate with articles read from the CSV file.
      */
-    private static void readArticles(String fileName, List<Plushies> plushies) {
+    private static void readArticles(String fileName, List<Plushie> plushies) {
         try {
             Reader in = new FileReader(RESOURCES + fileName);
             CSVFormat csvFormat = CSVFormat.EXCEL.withFirstRecordAsHeader().builder()
@@ -69,7 +68,7 @@ public class Shop {
                 String imageOnInspect = record.get("ImageOnInspect");
                 if (imageOnInspect.isEmpty()) image = "/images/winston_re.jpg";
 
-                Plushies plushie = new Plushies(name, type, height, length, width, price, inStock, image, imageOnInspect);
+                Plushie plushie = new Plushie(name, type, height, length, width, price, inStock, image, imageOnInspect);
                 plushies.add(plushie);
             }
             in.close();
@@ -84,7 +83,7 @@ public class Shop {
      *
      * @return An unmodifiable list of all articles.
      */
-    public static List<Plushies> getArticles() {
+    public static List<Plushie> getArticles() {
         return new ArrayList<>(ORIGINAL_PLUSHIES);
     }
 
@@ -94,8 +93,8 @@ public class Shop {
      * @param Id The article number of the plushie to retrieve.
      * @return The plushie with the specified article number, or null if not found.
      */
-    public static Plushies getPlushiebyID(int Id) {
-        for (Plushies plushies : ORIGINAL_PLUSHIES) {
+    public static Plushie getPlushiebyID(int Id) {
+        for (Plushie plushies : ORIGINAL_PLUSHIES) {
             if (plushies.getArticleNo() == Id) {
                 return plushies;
             }
@@ -109,8 +108,8 @@ public class Shop {
      * @param Id
      */
     public static void removeArticle(int Id) {
-        List<Plushies> mutablePlushies = new ArrayList<>(ORIGINAL_PLUSHIES);
-        for (Plushies plushies : mutablePlushies) {
+        List<Plushie> mutablePlushies = new ArrayList<>(ORIGINAL_PLUSHIES);
+        for (Plushie plushies : mutablePlushies) {
             if (plushies.getArticleNo() == Id) {
                 mutablePlushies.remove(plushies);
                 break; // Exit the loop after removing the article
