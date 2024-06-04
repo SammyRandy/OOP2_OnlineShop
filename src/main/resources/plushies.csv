@@ -1,6 +1,6 @@
 Name;Type;Height;Length;Width;Price;InStock;Image;ImageOnInspect
 Cuddly Cat;Plush;30;20;15;19.99;100;images/cat_re.jpg;images/cat.jpg
-Focused Eagle;Plush;18;10;10;23.99;100;images/eagle_re.jpg;images/eagle.jpg
+Focused Eagle;Plush;30;18;15;23.99;100;images/eagle_re.jpg;images/eagle.jpg
 Snuggly Sloth;Plush;25;18;12;16.99;100;images/sloth_re.jpg;images/sloth.jpg
 Cozy Koala;Plush;28;22;16;22.99;100;images/koala_re.jpg;images/koala.jpg
 Happy Hedgehog;Plush;20;15;10;14.99;100;images/hedgehog_re.jpg;images/hedgehog.jpg
